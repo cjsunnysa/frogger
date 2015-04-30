@@ -1,36 +1,52 @@
-﻿using ChrisJones.Frogger.GameObjects;
+﻿using System;
+using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
+using Gdk;
 using Gtk;
 
 namespace ChrisJones.Frogger
 {
 	public partial class MainWindow: Gtk.Window
 	{
-		private GameEngine _engine;
+		private readonly GameEngine _engine;
+		private readonly DrawingArea _area;
+		private bool _fireAgain = true;
 
 		public MainWindow () : base (Gtk.WindowType.Toplevel)
 		{
-			SetDefaultSize (640, 480);
-			SetPosition (WindowPosition.CenterOnParent);
 			Build ();
 
-			var area = new DrawingArea();
-			area.ExposeEvent += area_ExposeEvent;
-			this.Add(area);
+			_area = new DrawingArea();
+			_area.ExposeEvent += OnAreaExposeEvent;
+			this.Add(_area);
 
-			var factory = new GdkGameObjectFactory(area);
+			var factory = new GdkGameObjectFactory(_area);
 			_engine = new GameEngine(factory);
+			_engine.StartGame();
+
+			GLib.Timeout.Add(1, Tick);
 
 			ShowAll ();
 		}
 
-		void area_ExposeEvent(object o, ExposeEventArgs args)
+		private bool Tick()
 		{
-			_engine.StartGame();
+			if (_engine.GameCycle())
+				_area.QueueDraw();
+
+			return _fireAgain;
+		}
+
+
+		private void OnAreaExposeEvent(object o, ExposeEventArgs args)
+		{
+			_engine.Render();
 		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
+			_fireAgain = false;
+
 			Application.Quit ();
 			a.RetVal = true;
 		}

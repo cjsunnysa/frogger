@@ -1,42 +1,86 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.ExceptionServices;
+using System.Security.Cryptography;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
+using GLib;
 
 namespace ChrisJones.Frogger
 {
     public class GameEngine
     {
-        private readonly List<GameObject> _gameObjects;
+        private readonly List<object> _screenObjects;
         private readonly IGameObjectFactory _gameObjectFactory;
+        private readonly Stopwatch _frameTimer;
+        
 
         public GameEngine(IGameObjectFactory gameObjectFactory)
         {
             _gameObjectFactory = gameObjectFactory;
-            _gameObjects = new List<GameObject>();
+            _screenObjects = new List<object>();
+            _frameTimer = new Stopwatch();
         }
 
         public void StartGame()
         {
-            _gameObjects.Clear();
-
-            var playerStartPosition = new Position(320, 440);
-            const int carsRightPositionYPos = 130;
-            const int carsLeftPositionYPos = 190; 
+            _screenObjects.Clear();
             
-            _gameObjects.Add(_gameObjectFactory.CreatePlayer(playerStartPosition, Direction.Up));
-            
-            for (var xPos = 625; xPos >= 0; xPos-=50)
-                _gameObjects.Add(_gameObjectFactory.CreateCarDrivingLeft(new Position(xPos, carsLeftPositionYPos)));
+            CreatePlayers();
+            CreateLeftCarQueue();
+            CreateRightCarQueue();
 
-            for (var xPos = 0; xPos >= 625; xPos += 50)
-                _gameObjects.Add(_gameObjectFactory.CreateCarDrivingRight(new Position(xPos, carsRightPositionYPos)));
+            _frameTimer.Start();
+        }
 
-            foreach(var gameObject in _gameObjects)
+        public bool GameCycle()
+        {
+            if (_frameTimer.ElapsedMilliseconds <= GameConfig.DRAW_FRAME_EVERY_MILLISECONDS)
+                return false;
+
+
+            _frameTimer.Restart();
+
+            foreach (var gameObject in _screenObjects.Cast<IMoveable>())
+                gameObject.Move();
+
+            return true;
+        }
+
+        public void Render()
+        {
+            DrawAllObjectsToCanvas();
+        }
+
+        
+        private void CreatePlayers()
+        {
+            _screenObjects.Add(_gameObjectFactory.CreatePlayer(GameConfig.PLAYER_START_POSITION, Direction.Up));
+        }
+
+        private void CreateLeftCarQueue()
+        {
+            var queue = new GameObjectQueue(Direction.Left, _gameObjectFactory.CreateCarDrivingLeft,
+                GameConfig.CARS_LEFT_Y_POS, 12);
+
+            _screenObjects.Add(queue);
+        }
+
+        private void CreateRightCarQueue()
+        {
+            var queue = new GameObjectQueue(Direction.Right, _gameObjectFactory.CreateCarDrivingRight,
+                GameConfig.CARS_RIGHT_Y_POS, 12);
+
+            _screenObjects.Add(queue);
+        }
+        
+        private void DrawAllObjectsToCanvas()
+        {
+            foreach (var gameObject in _screenObjects.Cast<IRenderable>())
                 gameObject.Render();
         }
     }

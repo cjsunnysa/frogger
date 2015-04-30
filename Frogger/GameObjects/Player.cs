@@ -5,8 +5,11 @@ namespace ChrisJones.Frogger.GameObjects
 {
     public class Player : GameObject
     {
-        public Player(Position initialPosition, IRenderer renderer, Direction initialDirection) : base(initialPosition, renderer, initialDirection)
+        public Player(Position initialPosition, IRenderer renderer, Direction initialDirection, int speed) : base(initialPosition, renderer, initialDirection, speed)
         {
         }
+
+        public override void Move()
+        { }
     }
 }

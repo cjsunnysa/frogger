@@ -10,12 +10,12 @@ namespace ChrisJones.Frogger
 			// Widget Frogger.MainWindow
 			this.Name = "Frogger.MainWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("MainWindow");
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.WindowPosition = ((global::Gtk.WindowPosition)(3));
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 400;
-			this.DefaultHeight = 300;
+			this.DefaultWidth = 640;
+			this.DefaultHeight = 480;
 			this.Show ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		}

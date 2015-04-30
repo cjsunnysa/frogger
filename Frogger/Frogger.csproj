@@ -58,11 +58,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
     <Compile Include="Drawing2D\ShapePath.cs" />
+    <Compile Include="GameConfig.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameObjects\Car.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\GameObjectQueue.cs" />
     <Compile Include="GameObjects\GdkGameObjectFactory.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GtkRenderers\GtkCarRenderer.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="GtkRenderers\GtkRenderer.cs" />
     <Compile Include="Interfaces\IDirectable.cs" />
     <Compile Include="Interfaces\IGameObjectFactory.cs" />
+    <Compile Include="Interfaces\IMoveable.cs" />
     <Compile Include="Interfaces\IPathObject.cs" />
     <Compile Include="Interfaces\IPositionable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />

@@ -1,7 +1,6 @@
-﻿using System;
-using Gtk;
+﻿using Gtk;
 
-namespace Frogger
+namespace ChrisJones.Frogger
 {
 	class MainClass
 	{

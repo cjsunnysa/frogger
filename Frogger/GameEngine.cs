@@ -1,45 +1,43 @@
-using System;
-using Frogger.GameObjects.Interfaces;
-using Frogger.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.GameObjects;
+using ChrisJones.Frogger.Interfaces;
 
-namespace Frogger
+namespace ChrisJones.Frogger
 {
     public class GameEngine
     {
-        private readonly ISceneRenderer _sceneRenderer;
-        private readonly RandomGenerator _positionGenerator;
-        private Position _playerStartPosition;
+        private readonly List<GameObject> _gameObjects;
+        private readonly IGameObjectFactory _gameObjectFactory;
 
-        public GameEngine(ISceneRenderer sceneRenderer)
+        public GameEngine(IGameObjectFactory gameObjectFactory)
         {
-            _sceneRenderer = sceneRenderer;
-            _playerStartPosition = new Position(_sceneRenderer.GetCanvasWidth()/2, _sceneRenderer.GetCanvasHeight()/2);
-            _positionGenerator = new RandomGenerator ();
+            _gameObjectFactory = gameObjectFactory;
+            _gameObjects = new List<GameObject>();
         }
 
-        private void Initialise()
+        public void StartGame()
         {
-            _sceneRenderer.ClearScene ();
-            _sceneRenderer.AddPlayer (_playerStartPosition);
-            _sceneRenderer.RenderScene ();
+            _gameObjects.Clear();
 
-            GLib.Timeout.Add(2000, ExecuteGameCycle);
-        }
-
-        private bool ExecuteGameCycle()
-        {
-            var xpos = _positionGenerator.GetRandomPosition(Convert.ToInt32(_sceneRenderer.GetCanvasWidth()));
-            var ypos = _positionGenerator.GetRandomPosition(Convert.ToInt32(_sceneRenderer.GetCanvasHeight()));
+            var playerStartPosition = new Position(320, 440);
+            const int carsRightPositionYPos = 130;
+            const int carsLeftPositionYPos = 190; 
             
-            _sceneRenderer.AddCar(new Position(xpos, ypos));
-            _sceneRenderer.RenderScene ();
+            _gameObjects.Add(_gameObjectFactory.CreatePlayer(playerStartPosition, Direction.Up));
+            
+            for (var xPos = 625; xPos >= 0; xPos-=50)
+                _gameObjects.Add(_gameObjectFactory.CreateCarDrivingLeft(new Position(xPos, carsLeftPositionYPos)));
 
-            return true;
-        }
+            for (var xPos = 0; xPos >= 625; xPos += 50)
+                _gameObjects.Add(_gameObjectFactory.CreateCarDrivingRight(new Position(xPos, carsRightPositionYPos)));
 
-        public void Run()
-        {
-            Initialise ();
+            foreach(var gameObject in _gameObjects)
+                gameObject.Render();
         }
     }
 }

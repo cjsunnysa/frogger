@@ -1,35 +1,37 @@
 using System;
 using Cairo;
-using Frogger.GameObjects.Interfaces;
-using Frogger.Utils;
+using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace Frogger.GtkRenderers
+namespace ChrisJones.Frogger.GtkRenderers
 {
-    public class GtkCarRenderer : IRenderer
+    public class GtkCarRenderer : GtkRenderer
     {
-        private DrawingArea _area;
-        private const double CarWidth = 40;
-        private const double CarHeight = 20;
+        private const double CARHEIGHT = 15;
+        private const double CARWIDTH = 45;
 
         public GtkCarRenderer(DrawingArea area)
+            : base(area)
         {
-            _area = area;
         }
 
-        public void Render(Position position)
+        public override ShapePath RenderObjectToCanvas(GameObject gameObject)
         {
+            var shapePath = new ShapePath();
             var context = Gdk.CairoHelper.Create(_area.GdkWindow);
 
             context.LineWidth = 2;
             context.SetSourceRGB(0.7, 0.2, 0.0);
 
-            context.Rectangle(new Rectangle(position.XPos, position.YPos, CarWidth, CarHeight));
+            context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, CARWIDTH, CARHEIGHT));
             context.StrokePreserve();
 
-            
+
             (context.GetTarget() as IDisposable).Dispose();
             context.Dispose();
+
+            return shapePath;
         }
     }
 }

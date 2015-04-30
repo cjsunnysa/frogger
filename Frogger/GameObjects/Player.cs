@@ -1,28 +1,12 @@
-using Frogger.GameObjects.Interfaces;
-using Frogger.Utils;
-using Gtk;
+﻿using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.Interfaces;
 
-namespace Frogger
+namespace ChrisJones.Frogger.GameObjects
 {
-    public class Player : IRendable, IMovable
+    public class Player : GameObject
     {
-        private readonly IRenderer _renderer;
-        private readonly Position _position;
-
-        public Player(IRenderer renderer, Position position)
+        public Player(Position initialPosition, IRenderer renderer, Direction initialDirection) : base(initialPosition, renderer, initialDirection)
         {
-            _renderer = renderer;
-            _position = position;
-        }
-
-        public void Render ()
-        {
-            _renderer.Render (_position);
-        }
-
-        public void MoveTo(Position position)
-        {
-            _position.SetPosition(position.XPos, position.YPos);
         }
     }
 }

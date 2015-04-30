@@ -1,37 +1,36 @@
 using System;
 using Cairo;
-using Frogger.GameObjects.Interfaces;
-using Frogger.Utils;
+using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace Frogger.GtkRenderers
+namespace ChrisJones.Frogger.GtkRenderers
 {
-    public class GtkPlayerRenderer : IRenderer
+    public class GtkPlayerRenderer : GtkRenderer
     {
-        private DrawingArea _area;
-        private const double PlayerHeadHeight = 5;
-        private const double PlayerBodyHeight = 15;
+        private const double PLAYERHEIGHT = 45;
+        private const double PLAYERWIDTH = 15;
 
-        public GtkPlayerRenderer(DrawingArea area)
+        public GtkPlayerRenderer(DrawingArea area) : base(area)
         {
-            _area = area;
         }
 
-        public void Render(Position position)
+        public override ShapePath RenderObjectToCanvas(GameObject gameObject)
         {
-            var _context = Gdk.CairoHelper.Create (_area.GdkWindow);
+            var shapePath = new ShapePath();
+            var context = Gdk.CairoHelper.Create(_area.GdkWindow);
 
-            _context.LineWidth = 2;
-            _context.SetSourceRGB (0.7, 0.2, 0.0);
+            context.LineWidth = 2;
+            context.SetSourceRGB(0.7, 0.2, 0.0);
 
-            _context.Arc(position.XPos, position.YPos, PlayerHeadHeight, 0, 2*Math.PI);
-            _context.StrokePreserve ();
+            context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, PLAYERWIDTH, PLAYERHEIGHT));
+            context.StrokePreserve();
 
-            _context.Rectangle(new Rectangle(position.XPos-PlayerHeadHeight/1.5, position.YPos+PlayerHeadHeight+1, PlayerHeadHeight*1.5, PlayerBodyHeight));
-            _context.StrokePreserve ();				
 
-            (_context.GetTarget () as IDisposable).Dispose ();
-            _context.Dispose ();
+            (context.GetTarget() as IDisposable).Dispose();
+            context.Dispose();
+
+            return shapePath;
         }
     }
 }

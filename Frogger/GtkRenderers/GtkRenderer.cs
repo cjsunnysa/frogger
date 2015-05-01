@@ -14,6 +14,6 @@ namespace ChrisJones.Frogger.GtkRenderers
             _area = area;
         }
 
-        public abstract ShapePath RenderObjectToCanvas(GameObject gameObject);
+        public abstract HitTestArea RenderObjectToCanvas(GameObject gameObject);
     }
 }

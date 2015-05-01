@@ -10,7 +10,7 @@ namespace ChrisJones.Frogger
 	{
 		private readonly GameEngine _engine;
 		private readonly DrawingArea _area;
-		private bool _fireAgain = true;
+		private bool _windowOpen = true;
 
 		public MainWindow () : base (Gtk.WindowType.Toplevel)
 		{
@@ -34,7 +34,8 @@ namespace ChrisJones.Frogger
 			if (_engine.GameCycle())
 				_area.QueueDraw();
 
-			return _fireAgain;
+			return _engine.CollisionDetected() == false &&
+				   _windowOpen;
 		}
 
 
@@ -45,7 +46,7 @@ namespace ChrisJones.Frogger
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 		{
-			_fireAgain = false;
+			_windowOpen = false;
 
 			Application.Quit ();
 			a.RetVal = true;

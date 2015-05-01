@@ -8,30 +8,25 @@ namespace ChrisJones.Frogger.GtkRenderers
 {
     public class GtkCarRenderer : GtkRenderer
     {
-        private const double CARHEIGHT = 15;
-        private const double CARWIDTH = 45;
-
         public GtkCarRenderer(DrawingArea area)
             : base(area)
         {
         }
 
-        public override ShapePath RenderObjectToCanvas(GameObject gameObject)
+        public override HitTestArea RenderObjectToCanvas(GameObject gameObject)
         {
-            var shapePath = new ShapePath();
             var context = Gdk.CairoHelper.Create(_area.GdkWindow);
 
             context.LineWidth = 2;
             context.SetSourceRGB(0.7, 0.2, 0.0);
 
-            context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, CARWIDTH, CARHEIGHT));
+			context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height));
             context.StrokePreserve();
 
-
-            (context.GetTarget() as IDisposable).Dispose();
+			(context.GetTarget() as IDisposable).Dispose();
             context.Dispose();
 
-            return shapePath;
+			return new HitTestArea (new Position (gameObject.GetPosition ().XPos, gameObject.GetPosition ().YPos), GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height);
         }
     }
 }

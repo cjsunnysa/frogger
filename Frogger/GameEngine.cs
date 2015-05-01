@@ -14,25 +14,35 @@ namespace ChrisJones.Frogger
 {
     public class GameEngine
     {
-        private readonly List<object> _screenObjects;
-        private readonly IGameObjectFactory _gameObjectFactory;
+		private readonly List<Player> _players;
+		private readonly List<GameObjectQueue> _queues;
+		private readonly IGameObjectFactory _gameObjectFactory;
         private readonly Stopwatch _frameTimer;
-        
+		private readonly CollisionDetector _collisionDetector;
+
+		private GameObject[] _gameObjects
+		{
+			get 
+			{
+				return (from q in _queues
+			        from s in q.ScreenObjects
+			        select s).Union (_players).ToArray();
+			}
+		}
 
         public GameEngine(IGameObjectFactory gameObjectFactory)
         {
             _gameObjectFactory = gameObjectFactory;
-            _screenObjects = new List<object>();
+            _players = new List<Player>();
+			_queues = new List<GameObjectQueue>();
             _frameTimer = new Stopwatch();
+			_collisionDetector = new CollisionDetector ();
         }
 
         public void StartGame()
         {
-            _screenObjects.Clear();
-            
             CreatePlayers();
-            CreateLeftCarQueue();
-            CreateRightCarQueue();
+            CreateQueues ();
 
             _frameTimer.Start();
         }
@@ -45,10 +55,12 @@ namespace ChrisJones.Frogger
 
             _frameTimer.Restart();
 
-            foreach (var gameObject in _screenObjects.Cast<IMoveable>())
-                gameObject.Move();
+			foreach (var queueObject in _queues)
+				queueObject.Cycle ();
+			foreach(var player in _players)						 
+                player.Move();
 
-            return true;
+			return true;
         }
 
         public void Render()
@@ -56,18 +68,43 @@ namespace ChrisJones.Frogger
             DrawAllObjectsToCanvas();
         }
 
+		public bool CollisionDetected()
+		{
+			var queueObjects = (from q in _queues
+			                    from s in q.ScreenObjects
+			                    select s).ToArray();
+
+			foreach (var player in _players) 
+			{
+				if (_collisionDetector.CheckForCollisions (player, queueObjects))
+					return true;
+			}
+
+			return false;
+		}
+
         
         private void CreatePlayers()
         {
-            _screenObjects.Add(_gameObjectFactory.CreatePlayer(GameConfig.PLAYER_START_POSITION, Direction.Up));
+			_players.Clear();
+
+			_players.Add(_gameObjectFactory.CreatePlayer(GameConfig.PLAYER_START_POSITION, Direction.Up));
         }
+
+		void CreateQueues ()
+		{
+			_queues.Clear();
+
+			CreateLeftCarQueue ();
+			//CreateRightCarQueue ();
+		}
 
         private void CreateLeftCarQueue()
         {
             var queue = new GameObjectQueue(Direction.Left, _gameObjectFactory.CreateCarDrivingLeft,
                 GameConfig.CARS_LEFT_Y_POS, 12);
 
-            _screenObjects.Add(queue);
+            _queues.Add(queue);
         }
 
         private void CreateRightCarQueue()
@@ -75,12 +112,12 @@ namespace ChrisJones.Frogger
             var queue = new GameObjectQueue(Direction.Right, _gameObjectFactory.CreateCarDrivingRight,
                 GameConfig.CARS_RIGHT_Y_POS, 12);
 
-            _screenObjects.Add(queue);
+            _queues.Add(queue);
         }
         
         private void DrawAllObjectsToCanvas()
         {
-            foreach (var gameObject in _screenObjects.Cast<IRenderable>())
+			foreach(var gameObject in _gameObjects)						 
                 gameObject.Render();
         }
     }

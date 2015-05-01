@@ -10,6 +10,6 @@ namespace ChrisJones.Frogger.GameObjects
         }
 
         public override void Move()
-        { }
+		{ base.Move (); }
     }
 }

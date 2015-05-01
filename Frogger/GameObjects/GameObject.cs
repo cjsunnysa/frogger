@@ -3,12 +3,12 @@ using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.GameObjects
 {
-    public abstract class GameObject : IPositionable, IRenderable, IDirectable, IPathObject, IMoveable
+    public abstract class GameObject : IPositionable, IRenderable, IDirectable, IHitTestable, IMoveable
     {
         protected readonly Position _position;
         protected readonly IRenderer _renderer;
         protected Direction _direction;
-        protected ShapePath _renderedPath;
+        protected HitTestArea _hitTestArea;
         protected int _moveSpeed;
 
         protected GameObject(Position initialPosition, IRenderer renderer, Direction initialDirection, int moveSpeed)
@@ -17,6 +17,7 @@ namespace ChrisJones.Frogger.GameObjects
             _renderer = renderer;
             _direction = initialDirection;
             _moveSpeed = moveSpeed;
+			_hitTestArea = new HitTestArea (new Position(0,0), 0, 0);
         }
 
         public void SetPosition(Position position)
@@ -31,7 +32,7 @@ namespace ChrisJones.Frogger.GameObjects
 
         public void Render()
         {
-            _renderedPath = _renderer.RenderObjectToCanvas(this);
+            _hitTestArea = _renderer.RenderObjectToCanvas(this);
         }
 
         public void SetDirection(Direction direction)
@@ -44,9 +45,9 @@ namespace ChrisJones.Frogger.GameObjects
             return _direction;
         }
 
-        public ShapePath GetObjectPath()
+        public HitTestArea GetHitTestArea()
         {
-            return _renderedPath;
+            return _hitTestArea;
         }
 
         public virtual void Move()

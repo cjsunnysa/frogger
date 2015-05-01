@@ -10,6 +10,6 @@ namespace ChrisJones.Frogger.Interfaces
 {
     public interface IRenderer
     {
-        ShapePath RenderObjectToCanvas(GameObject gameObject);
+        HitTestArea RenderObjectToCanvas(GameObject gameObject);
     }
 }

@@ -7,7 +7,7 @@ namespace ChrisJones.Frogger
     {
         public static readonly Dimension SCREEN_SIZE = new Dimension(640, 480);
         public static readonly Dimension CAR_DIMENSION = new Dimension(45, 15);
-        public static readonly Dimension PLAYER_DIMENSION = new Dimension(15, 45);
+        public static readonly Dimension PLAYER_DIMENSION = new Dimension(15, 38);
         public static readonly Position PLAYER_START_POSITION = new Position(320, 420);
         public static readonly int LEFT_OFFSCREEN_X_POS = (CAR_DIMENSION.Width*-1) - 1;
         public static readonly int RIGHT_OFFSCREEN_X_POS = SCREEN_SIZE.Width + 1;

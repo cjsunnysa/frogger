@@ -9,7 +9,7 @@ namespace ChrisJones.Frogger.GameObjects
 {
     public delegate GameObject FactoryDelegate(Position position);
 
-    public class GameObjectQueue : IMoveable, IRenderable
+    public class GameObjectQueue
     {
         internal class OffscreenQueueObject
         {
@@ -17,9 +17,8 @@ namespace ChrisJones.Frogger.GameObjects
             public GameObject OffscreenGameObject { get; set; }
         }
 
-        
+		public List<GameObject> ScreenObjects { get; private set;} 
         private readonly int _canvasYPos;
-        private readonly List<GameObject> _screenObjects;
         private readonly List<OffscreenQueueObject> _offScreenObjects;
         private readonly Random _numGenerator;
         private readonly Direction _direction;
@@ -27,8 +26,8 @@ namespace ChrisJones.Frogger.GameObjects
 
         public GameObjectQueue(Direction cycleDirection, FactoryDelegate factoryMethod, int canvasYPos, int numQueueObjects)
         {
+			ScreenObjects = new List<GameObject>();
             _canvasYPos = canvasYPos;
-            _screenObjects = new List<GameObject>();
             _offScreenObjects = new List<OffscreenQueueObject>();
             _numGenerator = new Random();
             _direction = cycleDirection;
@@ -49,7 +48,7 @@ namespace ChrisJones.Frogger.GameObjects
 
         public void Cycle()
         {
-            foreach (var screenObject in _screenObjects.ToArray())
+            foreach (var screenObject in ScreenObjects.ToArray())
             {
                 screenObject.Move();
                 RemoveObjectIfOffscreen(screenObject);
@@ -65,25 +64,6 @@ namespace ChrisJones.Frogger.GameObjects
                     break;
             }
         }
-
-        public void Move()
-        {
-            Cycle();
-        }
-
-        public void Move(Direction direction)
-        {
-            Cycle();
-        }
-
-        public void Render()
-        {
-            foreach (var screenObject in _screenObjects)
-            {
-                screenObject.Render();
-            }
-        }
-
 
         private void CreateRightQueueObjects(FactoryDelegate factoryMethod, int maxCreateCount)
         {
@@ -134,7 +114,7 @@ namespace ChrisJones.Frogger.GameObjects
         private void CreateQueueObject(FactoryDelegate factoryMethod, int xPos)
         {
             var newObject = factoryMethod(new Position(xPos, _canvasYPos));
-            _screenObjects.Add(newObject);
+            ScreenObjects.Add(newObject);
         }
 
         private int GenerateDistance()
@@ -152,7 +132,7 @@ namespace ChrisJones.Frogger.GameObjects
             if ((gameObject.GetDirection() == Direction.Left && objectPastScreenLeft) ||
                 (gameObject.GetDirection() == Direction.Right && objectPastScreenRight))
             {
-                _screenObjects.Remove(gameObject);
+                ScreenObjects.Remove(gameObject);
                 _offScreenObjects.Add(new OffscreenQueueObject
                 {
                     DistanceToWait = GenerateDistance(),
@@ -163,8 +143,8 @@ namespace ChrisJones.Frogger.GameObjects
         
         private void AddOffscreenCarLeft()
         {
-            var lastxpos = _screenObjects.Where(o => o.GetDirection() == Direction.Left).Max(m => m.GetPosition().XPos);
-            var lastQueueObject = _screenObjects.FirstOrDefault(s => s.GetDirection() == Direction.Left && s.GetPosition().XPos.CompareTo(lastxpos) == 0);
+            var lastxpos = ScreenObjects.Where(o => o.GetDirection() == Direction.Left).Max(m => m.GetPosition().XPos);
+            var lastQueueObject = ScreenObjects.FirstOrDefault(s => s.GetDirection() == Direction.Left && s.GetPosition().XPos.CompareTo(lastxpos) == 0);
             
             if (lastQueueObject == null)
                 return;
@@ -183,14 +163,14 @@ namespace ChrisJones.Frogger.GameObjects
             {
                 _offScreenObjects.Remove(carToAdd);
                 carToAdd.OffscreenGameObject.SetPosition(new Position(GameConfig.RIGHT_OFFSCREEN_X_POS, _canvasYPos));
-                _screenObjects.Add(carToAdd.OffscreenGameObject);
+                ScreenObjects.Add(carToAdd.OffscreenGameObject);
             }
         }
 
         private void AddOffscreenCarRight()
         {
-            var lastxpos = _screenObjects.Where(o => o.GetDirection() == Direction.Right).Min(m => m.GetPosition().XPos);
-            var lastQueueObject = _screenObjects.FirstOrDefault(s => s.GetDirection() == Direction.Right && s.GetPosition().XPos.CompareTo(lastxpos) == 0);
+            var lastxpos = ScreenObjects.Where(o => o.GetDirection() == Direction.Right).Min(m => m.GetPosition().XPos);
+            var lastQueueObject = ScreenObjects.FirstOrDefault(s => s.GetDirection() == Direction.Right && s.GetPosition().XPos.CompareTo(lastxpos) == 0);
         
             if (lastQueueObject == null)
                 return;
@@ -209,7 +189,7 @@ namespace ChrisJones.Frogger.GameObjects
             {
                 _offScreenObjects.Remove(carToAdd);
                 carToAdd.OffscreenGameObject.SetPosition(new Position(GameConfig.LEFT_OFFSCREEN_X_POS, _canvasYPos));
-                _screenObjects.Add(carToAdd.OffscreenGameObject);
+                ScreenObjects.Add(carToAdd.OffscreenGameObject);
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Cairo;
 using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;
 

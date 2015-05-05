@@ -75,22 +75,22 @@ namespace ChrisJones.Frogger.GameObjects
 			}
 		}
 
-	    private void MoveRight()
+	    public void MoveRight()
 		{
 			_position.SetPosition(_position.XPos + _moveSpeed, _position.YPos);
 		}
 
-		private void MoveLeft()
+		public void MoveLeft()
 		{
 			_position.SetPosition(_position.XPos - _moveSpeed, _position.YPos);
 		}
 
-		private void MoveUp()
+		public void MoveUp()
 		{
 			_position.SetPosition(_position.XPos, _position.YPos - _moveSpeed);
 		}
 
-		private void MoveDown()
+		public void MoveDown()
 		{
 			_position.SetPosition(_position.XPos, _position.YPos + _moveSpeed);
 		}

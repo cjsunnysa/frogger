@@ -21,8 +21,7 @@ namespace ChrisJones.Frogger.Drawing2D
 
         public bool HasCollidedWith(HitTestArea otherArea)
         {
-            if (AreaPosition.XPos == 0 && AreaPosition.YPos == 0 &&
-                Width == 0 && Height == 0)
+            if (AreaPosition.XPos == 0 && AreaPosition.YPos == 0 && Width == 0 && Height == 0)
                 return false;
             
             var xNotIn = (AreaPosition.XPos + Width < otherArea.AreaPosition.XPos || AreaPosition.XPos > otherArea.AreaPosition.XPos + otherArea.Width);

@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using ChrisJones.Frogger.Drawing2D;
-using Gtk;
+﻿using ChrisJones.Frogger.Drawing2D;
 
-namespace ChrisJones.Frogger
+namespace ChrisJones.Frogger.Engine
 {
     public static class GameConfig
     {

@@ -71,13 +71,16 @@
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
     <Compile Include="Factories\CarQueueFactory.cs" />
-    <Compile Include="GameConfig.cs" />
-    <Compile Include="GameEngine.cs" />
+    <Compile Include="Engine\GameConfig.cs" />
+    <Compile Include="Engine\GameEngine.cs" />
+    <Compile Include="Interfaces\IKeyMapper.cs" />
+    <Compile Include="Engine\GdkKeyMovementMapper.cs" />
     <Compile Include="GameObjects\Car.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\GameObjectQueue.cs" />
-    <Compile Include="Factories\GdkGameObjectFactory.cs" />
+    <Compile Include="Factories\GtkGameObjectFactory.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GtkGameEngineController.cs" />
     <Compile Include="GtkRenderers\GtkCarRenderer.cs" />
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="GtkRenderers\GtkPlayerRenderer.cs" />
@@ -95,7 +98,7 @@
     <Compile Include="gtk-gui\Frogger.MainWindow.cs" />
     <Compile Include="Drawing2D\HitTestArea.cs" />
     <Compile Include="Interfaces\IHitTestable.cs" />
-    <Compile Include="CollisionDetector.cs" />
+    <Compile Include="Engine\CollisionDetector.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

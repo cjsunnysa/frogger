@@ -10,6 +10,9 @@ namespace ChrisJones.Frogger.Interfaces
     public interface IMoveable
     {
         void Move();
-        void Move(Direction direction);
+        void MoveUp();
+        void MoveDown();
+        void MoveLeft();
+        void MoveRight();
     }
 }

@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
-using GLib;
 using Gtk;
 
-namespace ChrisJones.Frogger
+namespace ChrisJones.Frogger.Engine
 {
     public class GameEngine
     {
@@ -82,34 +75,6 @@ namespace ChrisJones.Frogger
             }
 
             return false;
-        }
-
-        public void OnKeyPressed(object o, KeyPressEventArgs args)
-        {
-            var players = _screenObjects.OfType<Player>().ToArray();
-            if (!players.Any())
-                return;
-
-            foreach (var player in players)
-            {
-                var key = args.Event.Key;
-
-                switch (key)
-                {
-                    case Gdk.Key.KP_8:
-                        player.Move(Direction.Up);
-                        break;
-                    case Gdk.Key.KP_2:
-                        player.Move(Direction.Down);
-                        break;
-                    case Gdk.Key.KP_4:
-                        player.Move(Direction.Left);
-                        break;
-                    case Gdk.Key.KP_6:
-                        player.Move(Direction.Right);
-                        break;
-                } 
-            }
         }
 
         private void CreatePlayers()

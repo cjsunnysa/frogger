@@ -17,7 +17,7 @@ namespace ChrisJones.Frogger.Factories
 
         public Player CreatePlayer(Position startPosition, Direction initialDirection)
         {
-            return new Player(startPosition, new GtkPlayerRenderer(_area), initialDirection, GameConfig.CAR_SPEED);
+            return new Player(startPosition, new GtkPlayerRenderer(_area), initialDirection, GameConfig.PLAYER_SPEED);
         }
 
         public Car CreateCarDrivingLeft(Position startPosition)

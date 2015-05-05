@@ -7,52 +7,57 @@ using Gtk;
 
 namespace ChrisJones.Frogger
 {
-	public partial class MainWindow: Gtk.Window
-	{
-		private readonly GameEngine _engine;
-		private readonly DrawingArea _area;
-		private bool _fireAgain = true;
+    public partial class MainWindow: Gtk.Window
+    {
+        private readonly GameEngine _engine;
+        private readonly DrawingArea _area;
+        private bool _fireAgain = true;
 
-		public MainWindow () : base (Gtk.WindowType.Toplevel)
-		{
-			Build ();
+        public MainWindow () : base (Gtk.WindowType.Toplevel)
+        {
+            Build ();
 
-			_area = new DrawingArea();
-			_area.ExposeEvent += OnAreaExposeEvent;
-			this.Add(_area);
-			
-			var factory = new GdkGameObjectFactory(_area);
+            _area = new DrawingArea();
+            _area.ExposeEvent += OnAreaExposeEvent;
+            this.Add(_area);
+            
+            var factory = new GdkGameObjectFactory(_area);
 
-			_engine = new GameEngine(factory);
+            _engine = new GameEngine(factory);
 
-		    this.KeyPressEvent += _engine.OnKeyPressed;
-			
-			_engine.InitialiseGame();
+            this.KeyPressEvent += _engine.OnKeyPressed;
+            
+            _engine.InitialiseGame();
 
-			GLib.Timeout.Add(1, Tick);
+            GLib.Timeout.Add(1, Tick);
 
-			ShowAll ();
-		}
+            ShowAll ();
+        }
 
-		private bool Tick()
-		{
-			if (_engine.CycleGame())
-				_area.QueueDraw();
+        private bool Tick()
+        {
+            if (!_engine.CycleGame()) 
+                return _fireAgain;
+            
+            if (_engine.CollisionDetected())
+                _engine.InitialiseGame();
 
-			return _fireAgain;
-		}
+            _area.QueueDraw();
 
-		private void OnAreaExposeEvent(object o, ExposeEventArgs args)
-		{
-			_engine.RenderFrame();
-		}
+            return _fireAgain;
+        }
 
-		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
-		{
-			_fireAgain = false;
+        private void OnAreaExposeEvent(object o, ExposeEventArgs args)
+        {
+            _engine.RenderFrame();
+        }
 
-			Application.Quit ();
-			a.RetVal = true;
-		}
-	}
+        protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+        {
+            _fireAgain = false;
+
+            Application.Quit ();
+            a.RetVal = true;
+        }
+    }
 }

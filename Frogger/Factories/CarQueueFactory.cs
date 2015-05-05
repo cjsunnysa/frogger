@@ -11,6 +11,7 @@ namespace ChrisJones.Frogger.Factories
 {
     public class CarQueueFactory
     {
+        private Direction _initialDirection;
         private Direction _nextQueueDirection;
         private readonly IGameObjectFactory _factory;
         private int _totalQueueCount;
@@ -18,8 +19,16 @@ namespace ChrisJones.Frogger.Factories
 
         public CarQueueFactory(Direction firstQueueDirection, IGameObjectFactory factory)
         {
+            _initialDirection = firstQueueDirection;
             _nextQueueDirection = firstQueueDirection;
             _factory = factory;
+        }
+
+        public void Reset()
+        {
+            _nextQueueDirection = _initialDirection;
+            _totalQueueCount = 0;
+            _directionQueueCount = 0;
         }
 
         public GameObjectQueue CreateNextQueue()
@@ -32,10 +41,10 @@ namespace ChrisJones.Frogger.Factories
             switch (_nextQueueDirection)
             {
                 case Direction.Left:
-                    queue = new GameObjectQueue(Direction.Left, _factory.CreateCarDrivingLeft, ypos, 12);
+                    queue = new GameObjectQueue(Direction.Left, _factory.CreateCarDrivingLeft, ypos, 10);
                     break;
                 case Direction.Right:
-                    queue = new GameObjectQueue(Direction.Right, _factory.CreateCarDrivingRight, ypos, 12);
+                    queue = new GameObjectQueue(Direction.Right, _factory.CreateCarDrivingRight, ypos, 10);
                     break;
             }
 

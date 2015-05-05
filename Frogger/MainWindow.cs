@@ -1,4 +1,5 @@
 ﻿using System;
+using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
 using Gdk;
@@ -19,10 +20,14 @@ namespace ChrisJones.Frogger
 			_area = new DrawingArea();
 			_area.ExposeEvent += OnAreaExposeEvent;
 			this.Add(_area);
-
+			
 			var factory = new GdkGameObjectFactory(_area);
+
 			_engine = new GameEngine(factory);
-			_engine.StartGame();
+
+		    this.KeyPressEvent += _engine.OnKeyPressed;
+			
+			_engine.InitialiseGame();
 
 			GLib.Timeout.Add(1, Tick);
 
@@ -31,16 +36,15 @@ namespace ChrisJones.Frogger
 
 		private bool Tick()
 		{
-			if (_engine.GameCycle())
+			if (_engine.CycleGame())
 				_area.QueueDraw();
 
 			return _fireAgain;
 		}
 
-
 		private void OnAreaExposeEvent(object o, ExposeEventArgs args)
 		{
-			_engine.Render();
+			_engine.RenderFrame();
 		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)

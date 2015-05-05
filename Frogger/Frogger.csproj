@@ -61,12 +61,13 @@
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
     <Compile Include="Drawing2D\ShapePath.cs" />
+    <Compile Include="Factories\CarQueueFactory.cs" />
     <Compile Include="GameConfig.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameObjects\Car.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\GameObjectQueue.cs" />
-    <Compile Include="GameObjects\GdkGameObjectFactory.cs" />
+    <Compile Include="Factories\GdkGameObjectFactory.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GtkRenderers\GtkCarRenderer.cs" />
     <Compile Include="gtk-gui\generated.cs" />

@@ -17,17 +17,17 @@ namespace ChrisJones.Frogger.GtkRenderers
         {
             var context = Gdk.CairoHelper.Create(_area.GdkWindow);
 
-            context.LineWidth = 2;
+            context.LineWidth = 1;
             context.SetSourceRGB(0.7, 0.2, 0.0);
 
-			context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height));
+            context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height));
             context.StrokePreserve();
 
 
             (context.GetTarget() as IDisposable).Dispose();
             context.Dispose();
 
-			return new HitTestArea (new Position (gameObject.GetPosition ().XPos, gameObject.GetPosition ().YPos), GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height);
+            return new HitTestArea (new Position (gameObject.GetPosition ().XPos, gameObject.GetPosition ().YPos), GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height);
         }
     }
 }

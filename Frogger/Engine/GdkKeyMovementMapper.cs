@@ -1,4 +1,5 @@
-﻿using ChrisJones.Frogger.Interfaces;
+﻿using ChrisJones.Frogger.Delegates;
+using ChrisJones.Frogger.Interfaces;
 using Gtk;
 
 namespace ChrisJones.Frogger.Engine

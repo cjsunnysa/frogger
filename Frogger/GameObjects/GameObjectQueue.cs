@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using ChrisJones.Frogger.Delegates;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.GameObjects
 {
-    public delegate GameObject FactoryDelegate(Position position);
-
     public class GameObjectQueue : IMoveable, IRenderable
     {
         internal class OffscreenQueueObject

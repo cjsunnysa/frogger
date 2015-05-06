@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Cairo;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Engine;
@@ -7,27 +8,39 @@ using Gtk;
 
 namespace ChrisJones.Frogger.GtkRenderers
 {
-    public class GtkCarRenderer : GtkRenderer
+    public abstract class GtkCarRenderer : GtkRenderer
     {
-        public GtkCarRenderer(DrawingArea area)
+        protected Position _startPosition;
+        protected Context _context;
+
+        
+        protected GtkCarRenderer(DrawingArea area)
             : base(area)
         {
         }
 
         public override HitTestArea RenderObjectToCanvas(GameObject gameObject)
         {
-            var context = Gdk.CairoHelper.Create(_area.GdkWindow);
+            _startPosition = gameObject.GetPosition();
+            _context = Gdk.CairoHelper.Create(_area.GdkWindow);
 
-            context.LineWidth = 2;
-            context.SetSourceRGB(0.7, 0.2, 0.0);
+            _context.LineWidth = 1;
+            _context.SetSourceRGB(0.7, 0.2, 0.0);
 
-			context.Rectangle(new Rectangle(gameObject.GetPosition().XPos, gameObject.GetPosition().YPos, GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height));
-            context.StrokePreserve();
+            DrawBody();
+            DrawDetail();
 
-			(context.GetTarget() as IDisposable).Dispose();
-            context.Dispose();
+            _context.ClosePath();
 
-			return new HitTestArea (new Position (gameObject.GetPosition ().XPos, gameObject.GetPosition ().YPos), GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height);
+            _context.StrokePreserve();
+
+            (_context.GetTarget() as IDisposable).Dispose();
+            _context.Dispose();
+
+            return new HitTestArea (new Position (gameObject.GetPosition().XPos, gameObject.GetPosition().YPos), GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height);
         }
+
+        protected abstract void DrawBody();
+        protected abstract void DrawDetail();
     }
 }

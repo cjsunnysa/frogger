@@ -25,12 +25,12 @@ namespace ChrisJones.Frogger.Factories
 
         public Car CreateCarDrivingLeft(Position startPosition)
         {
-            return new Car(startPosition, new GtkCarRenderer(_area), Direction.Left, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkLeftCarRenderer(_area), Direction.Left, GameConfig.CAR_SPEED);
         }
 
         public Car CreateCarDrivingRight(Position startPosition)
         {
-            return new Car(startPosition, new GtkCarRenderer(_area), Direction.Right, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkRightCarRenderer(_area), Direction.Right, GameConfig.CAR_SPEED);
         }
     }
 }

@@ -1,7 +1,7 @@
+using ChrisJones.Frogger.Delegates;
+
 namespace ChrisJones.Frogger.Interfaces
 {
-    public delegate void OnMove();
-
     public interface IKeyMapper
     {
         event OnMove OnMoveUpEvent;

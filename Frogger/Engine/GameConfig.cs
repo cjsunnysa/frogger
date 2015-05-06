@@ -7,9 +7,9 @@ namespace ChrisJones.Frogger.Engine
         public static readonly Dimension SCREEN_SIZE = new Dimension(640, 480);
 
         
-        public static readonly Dimension PLAYER_DIMENSION = new Dimension(10, 25);
+        public static readonly Dimension PLAYER_DIMENSION = new Dimension(10, 30);
         public static readonly Position PLAYER_START_POSITION = new Position(320, 420);
-        public static readonly int PLAYER_SPEED = 34;
+        public static readonly int PLAYER_SPEED = 30;
 
         public static readonly Dimension CAR_DIMENSION = new Dimension(55, 23);
         public static readonly int CAR_QUEUE_COUNT = 2;

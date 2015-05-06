@@ -19,5 +19,10 @@ namespace ChrisJones.Frogger.GameObjects
 
         public override void Move()
         { }
+
+        public bool HasWon()
+        {
+            return this.GetPosition().YPos < 0;
+        }
     }
 }

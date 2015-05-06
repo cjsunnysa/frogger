@@ -47,9 +47,6 @@ namespace ChrisJones.Frogger
             if (!_engine.CycleGame())
                 return _fireAgain;
 
-            if (_engine.CollisionDetected())
-                _engine.InitialiseGame();
-
             _area.QueueDraw();
 
             return _fireAgain;

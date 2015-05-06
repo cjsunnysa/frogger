@@ -44,12 +44,20 @@ namespace ChrisJones.Frogger.Engine
             if (_frameTimer.ElapsedMilliseconds <= 1000/GameConfig.FPS)
                 return false;
 
-            _frameTimer.Restart();
-
             foreach (var screenObject in _screenObjects.OfType<IMoveable>())
                 screenObject.Move();
 
+            if (PlayerWinDetected() || CollisionDetected())
+                InitialiseGame();
+
+            _frameTimer.Restart();
+
             return true;
+        }
+
+        private bool PlayerWinDetected()
+        {
+            return _screenObjects.OfType<Player>().Any(player => player.HasWon());
         }
 
         public void RenderFrame()
@@ -59,7 +67,7 @@ namespace ChrisJones.Frogger.Engine
         }
 
         
-        public bool CollisionDetected()
+        private bool CollisionDetected()
         {
             var queueObjects = (from q in _screenObjects.OfType<GameObjectQueue>()
                                 from s in q.ScreenObjects
@@ -79,7 +87,12 @@ namespace ChrisJones.Frogger.Engine
 
         private void CreatePlayers()
         {
-            _screenObjects.Add(_gameObjectFactory.CreatePlayer(new Position(GameConfig.PLAYER_START_POSITION.XPos, GameConfig.PLAYER_START_POSITION.YPos), Direction.Up));
+            var player =
+                _gameObjectFactory.CreatePlayer(
+                    new Position(GameConfig.PLAYER_START_POSITION.XPos, GameConfig.PLAYER_START_POSITION.YPos),
+                    Direction.Up);
+            
+            _screenObjects.Add(player);
         }
 
         private void CreateCarQueues()

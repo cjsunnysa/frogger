@@ -1,4 +1,5 @@
 ﻿using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.GameObjects
 {

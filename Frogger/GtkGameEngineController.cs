@@ -49,7 +49,7 @@ namespace ChrisJones.Frogger
 
             _area.QueueDraw();
 
-            return _fireAgain;
+            return _fireAgain && _engine.GameRunning;
         }
 
         public void Stop()

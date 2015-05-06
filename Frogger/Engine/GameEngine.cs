@@ -11,6 +11,8 @@ namespace ChrisJones.Frogger.Engine
 {
     public class GameEngine
     {
+        public bool GameRunning { get; private set; }
+        
         private readonly List<object> _screenObjects;
         private readonly Stopwatch _frameTimer;
         private readonly CarQueueFactory _queueFactory;
@@ -36,6 +38,7 @@ namespace ChrisJones.Frogger.Engine
             for(var x = 0; x < GameConfig.CAR_QUEUE_COUNT; x++)
                 CreateCarQueues();
 
+            GameRunning = true;
             _frameTimer.Start();
         }
 
@@ -47,17 +50,15 @@ namespace ChrisJones.Frogger.Engine
             foreach (var screenObject in _screenObjects.OfType<IMoveable>())
                 screenObject.Move();
 
-            if (PlayerWinDetected() || CollisionDetected())
+            if (CollisionDetected())
+                GameRunning = false;
+
+            if (PlayerWinDetected())
                 InitialiseGame();
 
             _frameTimer.Restart();
 
             return true;
-        }
-
-        private bool PlayerWinDetected()
-        {
-            return _screenObjects.OfType<Player>().Any(player => player.HasWon());
         }
 
         public void RenderFrame()
@@ -78,11 +79,26 @@ namespace ChrisJones.Frogger.Engine
             foreach (var player in players)
             {
                 var collisionObjects = players.Where(p => p != player).Union(queueObjects).ToArray();
-                if (_collisionDetector.CheckForCollisions (player, collisionObjects))
+                if (_collisionDetector.CheckForCollisions(player, collisionObjects))
+                {
+                    _screenObjects.Remove(player);
+                    CreateStainForPlayer(player);
                     return true;
+                }
             }
 
             return false;
+        }
+
+        private void CreateStainForPlayer(Player player)
+        {
+            var stain = _gameObjectFactory.CreateStainFromPlayer(player);
+            _screenObjects.Add(stain);
+        }
+
+        private bool PlayerWinDetected()
+        {
+            return _screenObjects.OfType<Player>().Any(player => player.HasWon());
         }
 
         private void CreatePlayers()

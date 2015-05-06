@@ -1,4 +1,6 @@
+using Cairo;
 using ChrisJones.Frogger.Engine;
+using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
 namespace ChrisJones.Frogger.GtkRenderers
@@ -9,11 +11,13 @@ namespace ChrisJones.Frogger.GtkRenderers
         {
         }
 
-        protected override void DrawBody()
+        protected override void DrawBody(Context context, GameObject gameObject)
         {
-            var startx = _startPosition.XPos+GameConfig.CAR_DIMENSION.Width;
-            var starty = _startPosition.YPos;
-            var boty = _startPosition.YPos + GameConfig.CAR_DIMENSION.Height;
+            var startPosition = gameObject.GetPosition();
+
+            var startx = startPosition.XPos+GameConfig.CAR_DIMENSION.Width;
+            var starty = startPosition.YPos;
+            var boty = startPosition.YPos + GameConfig.CAR_DIMENSION.Height;
 
             var yoffset = GameConfig.CAR_DIMENSION.Height / 4;
             var xoffset = (GameConfig.CAR_DIMENSION.Width / 2.8) * -1;
@@ -37,90 +41,90 @@ namespace ChrisJones.Frogger.GtkRenderers
             var strutWidth = xoffset / 4;
 
             //top bonnet line.
-            _context.MoveTo(startx, starty + yoffset);
-            _context.LineTo(startx + xoffset, doorTopY);
+            context.MoveTo(startx, starty + yoffset);
+            context.LineTo(startx + xoffset, doorTopY);
             //top door line.
-            _context.RelLineTo(xoffset, 0);
+            context.RelLineTo(xoffset, 0);
 
             //bottom bonnet line.
-            _context.MoveTo(startx, boty - yoffset);
-            _context.LineTo(startx + xoffset, doorBotY);
+            context.MoveTo(startx, boty - yoffset);
+            context.LineTo(startx + xoffset, doorBotY);
             //bottom door line.
-            _context.RelLineTo(xoffset, 0);
+            context.RelLineTo(xoffset, 0);
 
 
             //windscreen large curve.
-            _context.MoveTo(wind1X, doorTopY);
-            _context.RelCurveTo(6, yoffset, 6, GameConfig.CAR_DIMENSION.Height - yoffset, 0, doorBotY - doorTopY);
+            context.MoveTo(wind1X, doorTopY);
+            context.RelCurveTo(6, yoffset, 6, GameConfig.CAR_DIMENSION.Height - yoffset, 0, doorBotY - doorTopY);
 
 
             //windscreen small curve.
-            _context.MoveTo(wind2X, starty + shieldOffset);
-            _context.RelCurveTo(6, 1, 6, shieldHeight - 1, 0, shieldHeight);
+            context.MoveTo(wind2X, starty + shieldOffset);
+            context.RelCurveTo(6, 1, 6, shieldHeight - 1, 0, shieldHeight);
 
             //roof bottom line.
-            _context.RelLineTo(xoffset - shieldWidth, 0);
+            context.RelLineTo(xoffset - shieldWidth, 0);
 
 
             //roof top line.
-            _context.MoveTo(wind2X, starty + shieldOffset);
-            _context.RelLineTo(xoffset - shieldWidth, 0);
+            context.MoveTo(wind2X, starty + shieldOffset);
+            context.RelLineTo(xoffset - shieldWidth, 0);
 
 
             //windscreen top corner.
-            _context.MoveTo(wind2X, starty + shieldOffset);
-            _context.LineTo(wind1X, doorTopY);
+            context.MoveTo(wind2X, starty + shieldOffset);
+            context.LineTo(wind1X, doorTopY);
 
             //windscreen bottom corner.
-            _context.MoveTo(wind2X, wind2Y);
-            _context.LineTo(wind1X, doorBotY);
+            context.MoveTo(wind2X, wind2Y);
+            context.LineTo(wind1X, doorBotY);
 
             //rear top strut.
-            _context.MoveTo(strutX, roofTopY);
-            _context.LineTo(strutX + strutWidth, doorTopY);
-            _context.RelLineTo(-strutWidth, 0);
+            context.MoveTo(strutX, roofTopY);
+            context.LineTo(strutX + strutWidth, doorTopY);
+            context.RelLineTo(-strutWidth, 0);
 
             //rear bottom strut.
-            _context.MoveTo(strutX, roofBotY);
-            _context.LineTo(strutX + strutWidth, doorBotY);
-            _context.RelLineTo(-strutWidth, 0);
+            context.MoveTo(strutX, roofBotY);
+            context.LineTo(strutX + strutWidth, doorBotY);
+            context.RelLineTo(-strutWidth, 0);
 
             //rear screen top.
-            _context.MoveTo(strutX, roofTopY);
-            _context.RelLineTo(0, shieldHeight);
+            context.MoveTo(strutX, roofTopY);
+            context.RelLineTo(0, shieldHeight);
 
 
             //rear screen bottom.
-            _context.MoveTo(strutX + strutWidth, doorTopY);
-            _context.RelLineTo(0, doorBotY - doorTopY);
+            context.MoveTo(strutX + strutWidth, doorTopY);
+            context.RelLineTo(0, doorBotY - doorTopY);
 
 
 
             var bootX = strutX + strutWidth;
-            var bootWidth = bootX - _startPosition.XPos;
+            var bootWidth = bootX - startPosition.XPos;
             var adjustWidth = bootWidth / 4;
             bootX -= adjustWidth;
 
             //boot top to bot line.
-            _context.MoveTo(bootX, roofTopY);
-            _context.LineTo(bootX, roofBotY);
+            context.MoveTo(bootX, roofTopY);
+            context.LineTo(bootX, roofBotY);
 
             //boot width line top.
-            _context.MoveTo(bootX, roofTopY);
-            _context.LineTo(_startPosition.XPos, roofTopY);
+            context.MoveTo(bootX, roofTopY);
+            context.LineTo(startPosition.XPos, roofTopY);
 
             //boot width line bottom.
-            _context.MoveTo(bootX, roofBotY);
-            _context.LineTo(_startPosition.XPos, roofBotY);
+            context.MoveTo(bootX, roofBotY);
+            context.LineTo(startPosition.XPos, roofBotY);
         }
 
-        protected override void DrawDetail()
+        protected override void DrawDetail(Context context, GameObject gameObject)
         {
-            _context.MoveTo(_startPosition.XPos+GameConfig.CAR_DIMENSION.Width, _startPosition.YPos);
-            _context.RelLineTo(-GameConfig.CAR_DIMENSION.Width, 0);
-            _context.RelLineTo(0, GameConfig.CAR_DIMENSION.Height);
-            _context.RelLineTo(GameConfig.CAR_DIMENSION.Width, 0);
-            _context.RelCurveTo(4, -4, 4, GameConfig.CAR_DIMENSION.Height * -1 + 4, 0, GameConfig.CAR_DIMENSION.Height * -1);
+            context.MoveTo(gameObject.GetPosition().XPos+GameConfig.CAR_DIMENSION.Width, gameObject.GetPosition().YPos);
+            context.RelLineTo(-GameConfig.CAR_DIMENSION.Width, 0);
+            context.RelLineTo(0, GameConfig.CAR_DIMENSION.Height);
+            context.RelLineTo(GameConfig.CAR_DIMENSION.Width, 0);
+            context.RelCurveTo(4, -4, 4, GameConfig.CAR_DIMENSION.Height * -1 + 4, 0, GameConfig.CAR_DIMENSION.Height * -1);
         }
     }
 }

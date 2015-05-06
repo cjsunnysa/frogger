@@ -32,5 +32,11 @@ namespace ChrisJones.Frogger.Factories
         {
             return new Car(startPosition, new GtkRightCarRenderer(_area), Direction.Right, GameConfig.CAR_SPEED);
         }
+
+        public Stain CreateStainFromPlayer(Player player)
+        {
+            var position = player.GetPosition();
+            return new Stain(new Position(position.XPos, position.YPos), new GtkStainRenderer(_area));
+        }
     }
 }

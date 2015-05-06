@@ -57,8 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <Package>gtk-sharp-2.0</Package>
     </Reference>
-    <Reference Include="Mono.Posix" />
-    <Reference Include="Mono.Cairo" />
     <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </ItemGroup>
@@ -75,8 +73,10 @@
     <Compile Include="Factories\CarQueueFactory.cs" />
     <Compile Include="Engine\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
+    <Compile Include="GameObjects\Stain.cs" />
     <Compile Include="GtkRenderers\GtkLeftCarRenderer.cs" />
     <Compile Include="GtkRenderers\GtkRightCarRenderer.cs" />
+    <Compile Include="GtkRenderers\GtkStainRenderer.cs" />
     <Compile Include="Interfaces\IKeyMapper.cs" />
     <Compile Include="Engine\GdkKeyMovementMapper.cs" />
     <Compile Include="GameObjects\Car.cs" />

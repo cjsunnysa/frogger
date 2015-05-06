@@ -27,14 +27,7 @@ namespace ChrisJones.Frogger.GtkRenderers
             var height = width;
             
 
-            context.MoveTo(x, y + radius);
-            context.Arc(x + radius, y + radius, radius, Math.PI, -Math.PI / 2);
-            context.LineTo(x + width - radius, y);
-            context.Arc(x + width - radius, y + radius, radius, -Math.PI / 2, 0);
-            context.LineTo(x + width, y + height - radius);
-            context.Arc(x + width - radius, y + height - radius, radius, 0, Math.PI / 2);
-            context.LineTo(x + radius, y + height);
-            context.Arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI);
+            context.Arc(x+radius, y+radius, radius, 0, 2 * Math.PI);
 
             var neckHeight = height/5;
             var bodyY = y + height + neckHeight;

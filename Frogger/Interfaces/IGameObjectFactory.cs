@@ -8,5 +8,6 @@ namespace ChrisJones.Frogger.Interfaces
         Player CreatePlayer(Position startPosition, Direction initialDirection);
         Car CreateCarDrivingLeft(Position startPosition);
         Car CreateCarDrivingRight(Position startPosition);
+        Stain CreateStainFromPlayer(Player player);
     }
 }

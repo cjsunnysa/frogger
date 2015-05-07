@@ -71,7 +71,7 @@
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
     <Compile Include="Factories\CarQueueFactory.cs" />
-    <Compile Include="Engine\GameConfig.cs" />
+    <Compile Include="Configuration\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
     <Compile Include="GameObjects\Stain.cs" />
     <Compile Include="GtkRenderers\GtkLeftCarRenderer.cs" />
@@ -104,8 +104,6 @@
     <Compile Include="Interfaces\IHitTestable.cs" />
     <Compile Include="Engine\CollisionDetector.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
 using System;
+using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;

@@ -1,4 +1,5 @@
 using Cairo;
+using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;

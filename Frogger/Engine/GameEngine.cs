@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.GameObjects;

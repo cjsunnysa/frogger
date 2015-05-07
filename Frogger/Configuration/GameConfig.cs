@@ -1,6 +1,6 @@
 ﻿using ChrisJones.Frogger.Drawing2D;
 
-namespace ChrisJones.Frogger.Engine
+namespace ChrisJones.Frogger.Configuration
 {
     public static class GameConfig
     {

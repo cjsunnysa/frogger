@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Delegates;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Engine;

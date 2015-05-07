@@ -16,7 +16,7 @@ namespace ChrisJones.Frogger.GtkRenderers
         {
             var x = gameObject.GetPosition().XPos;
             var y = gameObject.GetPosition().YPos;
-            var radius = GameConfig.PLAYER_DIMENSION.Width/1.1;
+            var radius = GameConfig.PLAYER_DIMENSION.Width;
 
             var context = Gdk.CairoHelper.Create(_area.GdkWindow);
             context.SetSourceRGB(0.7, 0.2, 0.0);
@@ -24,11 +24,11 @@ namespace ChrisJones.Frogger.GtkRenderers
 
 
             
-            context.Arc(x, y+radius, radius, 0, Math.PI * 2);
+            context.Arc(x+5, y+radius, radius, 0, Math.PI * 2);
             context.Fill();
             
-            context.Translate(x, y+radius/2.1);
-            context.Scale(1, 0.5);
+            context.Translate(x+8, y+(radius/1.2));
+            context.Scale(1, 0.7);
             context.Arc(0, 0, radius*1.2, -1.5, Math.PI/2);
             context.Fill();
 

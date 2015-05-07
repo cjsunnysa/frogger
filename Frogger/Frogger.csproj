@@ -104,6 +104,8 @@
     <Compile Include="Interfaces\IHitTestable.cs" />
     <Compile Include="Engine\CollisionDetector.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

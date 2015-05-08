@@ -7,8 +7,8 @@ namespace ChrisJones.Frogger.GameObjects
 {
     public class LeftGameObjectQueue : GameObjectQueue
     {
-        public LeftGameObjectQueue(int yPos, int moveSpeed, FactoryDelegate factoryMethod, int numQueueObjects)
-            : base(new Position(GameConfig.RIGHT_OFFSCREEN_X_POS, yPos), Direction.Right, moveSpeed, factoryMethod, numQueueObjects)
+        public LeftGameObjectQueue(int yPos, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects)
+            : base(new Position(GameConfig.RIGHT_OFFSCREEN_X_POS, yPos), Direction.Right, moveSpeed, childCreateMethod, numQueueObjects)
         {
         }
 

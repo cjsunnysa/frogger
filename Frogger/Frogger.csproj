@@ -66,8 +66,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Delegates\FactoryDelegate.cs" />
-    <Compile Include="Delegates\OnMove.cs" />
+    <Compile Include="Delegates\ChildObjectCreateMethod.cs" />
+    <Compile Include="Delegates\OnMoveEvent.cs" />
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
     <Compile Include="Factories\CarQueueFactory.cs" />

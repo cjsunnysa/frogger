@@ -23,7 +23,7 @@ namespace ChrisJones.Frogger.Engine
         {
             var key = args.Event.Key;
 
-            OnMove eventToFire = null;
+            OnMoveEvent eventToFire = null;
             
             if (key == _upKey)
                 eventToFire = OnMoveUpEvent;
@@ -40,9 +40,9 @@ namespace ChrisJones.Frogger.Engine
             eventToFire();
         }
 
-        public event OnMove OnMoveUpEvent;
-        public event OnMove OnMoveDownEvent;
-        public event OnMove OnMoveLeftEvent;
-        public event OnMove OnMoveRightEvent;
+        public event OnMoveEvent OnMoveUpEvent;
+        public event OnMoveEvent OnMoveDownEvent;
+        public event OnMoveEvent OnMoveLeftEvent;
+        public event OnMoveEvent OnMoveRightEvent;
     }
 }

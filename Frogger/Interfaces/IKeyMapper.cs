@@ -4,9 +4,9 @@ namespace ChrisJones.Frogger.Interfaces
 {
     public interface IKeyMapper
     {
-        event OnMove OnMoveUpEvent;
-        event OnMove OnMoveDownEvent;
-        event OnMove OnMoveLeftEvent;
-        event OnMove OnMoveRightEvent;
+        event OnMoveEvent OnMoveUpEvent;
+        event OnMoveEvent OnMoveDownEvent;
+        event OnMoveEvent OnMoveLeftEvent;
+        event OnMoveEvent OnMoveRightEvent;
     }
 }

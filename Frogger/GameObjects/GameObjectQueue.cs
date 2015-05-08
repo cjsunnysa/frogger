@@ -23,16 +23,16 @@ namespace ChrisJones.Frogger.GameObjects
         protected abstract bool ObjectPastEndOfQueue(GameObject gameObject);
         protected abstract bool EnumerateXPosRange(ref int xpos);
     
-        protected GameObjectQueue(Position intitialPosition, Direction initialDirection, int moveSpeed, FactoryDelegate factoryMethod, int numQueueObjects)
+        protected GameObjectQueue(Position intitialPosition, Direction initialDirection, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects)
             : base(intitialPosition, new NullRenderer(), initialDirection, moveSpeed)
         {
             _offScreenObjects = new List<OffscreenQueueObject>();
             _numGenerator = new Random();
 
-            CreateQueueObjects(factoryMethod, numQueueObjects);
+            CreateQueueObjects(childCreateMethod, numQueueObjects);
         }
 
-        private void CreateQueueObjects(FactoryDelegate factoryMethod, int maxCreateCount)
+        private void CreateQueueObjects(ChildObjectCreateMethod factoryMethod, int maxCreateCount)
         {
             var createdCount = 0;
 
@@ -49,7 +49,7 @@ namespace ChrisJones.Frogger.GameObjects
             AddRemainderOffscreen(factoryMethod, maxCreateCount, createdCount);
         }
         
-        private void AddRemainderOffscreen(FactoryDelegate factoryMethod, int maxCreateCount, int createdCount)
+        private void AddRemainderOffscreen(ChildObjectCreateMethod factoryMethod, int maxCreateCount, int createdCount)
         {
             var remainderCount = maxCreateCount - createdCount;
             for (var count = 0; count < remainderCount; count++)
@@ -60,7 +60,7 @@ namespace ChrisJones.Frogger.GameObjects
                 });
         }
         
-        private void CreateQueueObject(FactoryDelegate factoryMethod, int xPos)
+        private void CreateQueueObject(ChildObjectCreateMethod factoryMethod, int xPos)
         {
             var newObject = factoryMethod(new Position(xPos, Position.YPos));
             ChildObjects.Add(newObject);

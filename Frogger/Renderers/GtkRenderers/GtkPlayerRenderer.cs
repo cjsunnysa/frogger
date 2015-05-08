@@ -2,11 +2,10 @@ using System;
 using Cairo;
 using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
-using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace ChrisJones.Frogger.GtkRenderers
+namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
     public class GtkPlayerRenderer : GtkRenderer
     {
@@ -21,8 +20,8 @@ namespace ChrisJones.Frogger.GtkRenderers
             context.LineWidth = 1;
             context.SetSourceRGB(0.7, 0.2, 0.0);
 
-            var x = gameObject.GetPosition().XPos;
-            var y = gameObject.GetPosition().YPos;
+            var x = gameObject.Position.XPos;
+            var y = gameObject.Position.YPos;
             var width = GameConfig.PLAYER_DIMENSION.Width; 
             var radius = width / 2;
             var height = width;
@@ -50,7 +49,7 @@ namespace ChrisJones.Frogger.GtkRenderers
             (context.GetTarget() as IDisposable).Dispose();
             context.Dispose();
 
-            return new HitTestArea (new Position (gameObject.GetPosition ().XPos, gameObject.GetPosition ().YPos), GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height);
+            return new HitTestArea (new Position (gameObject.Position.XPos, gameObject.Position.YPos), GameConfig.PLAYER_DIMENSION.Width, GameConfig.PLAYER_DIMENSION.Height);
         }
     }
 }

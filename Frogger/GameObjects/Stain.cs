@@ -8,8 +8,11 @@ namespace ChrisJones.Frogger.GameObjects
         private const Direction INITIAL_DIRECTION = Direction.Up;
         private const int MOVE_SPEED = 0;
 
-        public Stain(Position initialPosition, IRenderer renderer) : base(initialPosition, renderer, INITIAL_DIRECTION, MOVE_SPEED)
+        public Stain(Position spawnPosition, IRenderer renderer) : base(spawnPosition, renderer, INITIAL_DIRECTION, MOVE_SPEED)
         {
         }
+
+        public override void AutoMove()
+        { }
     }
 }

@@ -1,11 +1,10 @@
 using System;
 using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
-using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace ChrisJones.Frogger.GtkRenderers
+namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
     public class GtkStainRenderer : GtkRenderer
     {
@@ -15,8 +14,8 @@ namespace ChrisJones.Frogger.GtkRenderers
 
         public override HitTestArea RenderObjectToCanvas(GameObject gameObject)
         {
-            var x = gameObject.GetPosition().XPos;
-            var y = gameObject.GetPosition().YPos;
+            var x = gameObject.Position.XPos;
+            var y = gameObject.Position.YPos;
             var radius = GameConfig.PLAYER_DIMENSION.Width;
 
             var context = Gdk.CairoHelper.Create(_area.GdkWindow);

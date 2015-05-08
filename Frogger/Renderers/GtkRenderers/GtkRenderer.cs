@@ -3,7 +3,7 @@ using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
 using Gtk;
 
-namespace ChrisJones.Frogger.GtkRenderers
+namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
     public abstract class GtkRenderer : IRenderer
     {

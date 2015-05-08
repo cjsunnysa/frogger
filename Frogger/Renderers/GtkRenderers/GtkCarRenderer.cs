@@ -1,13 +1,11 @@
 using System;
-using System.ComponentModel;
 using Cairo;
 using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
-using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace ChrisJones.Frogger.GtkRenderers
+namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
     public abstract class GtkCarRenderer : GtkRenderer
     {
@@ -34,7 +32,7 @@ namespace ChrisJones.Frogger.GtkRenderers
             (context.GetTarget() as IDisposable).Dispose();
             context.Dispose();
 
-            return new HitTestArea (new Position (gameObject.GetPosition().XPos, gameObject.GetPosition().YPos), GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height);
+            return new HitTestArea (new Position (gameObject.Position.XPos, gameObject.Position.YPos), GameConfig.CAR_DIMENSION.Width, GameConfig.CAR_DIMENSION.Height);
         }
 
         protected abstract void DrawBody(Context context, GameObject gameObject);

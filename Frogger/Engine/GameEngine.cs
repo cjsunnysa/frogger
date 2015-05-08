@@ -14,19 +14,17 @@ namespace ChrisJones.Frogger.Engine
     {
         public bool GameRunning { get; private set; }
         
-        private readonly List<object> _screenObjects;
+        private readonly List<GameObject> _screenObjects;
         private readonly Stopwatch _frameTimer;
         private readonly CarQueueFactory _queueFactory;
-        private readonly CollisionDetector _collisionDetector;
         private readonly IGameObjectFactory _gameObjectFactory;
 
         public GameEngine(IGameObjectFactory gameObjectFactory)
         {
             _gameObjectFactory = gameObjectFactory;
-            _screenObjects = new List<object>();
+            _screenObjects = new List<GameObject>();
             _frameTimer = new Stopwatch();
             _queueFactory= new CarQueueFactory(Direction.Left, gameObjectFactory);
-            _collisionDetector = new CollisionDetector();
         }
 
         public void InitialiseGame()
@@ -35,9 +33,7 @@ namespace ChrisJones.Frogger.Engine
             _queueFactory.Reset();
             
             CreatePlayers();
-            
-            for(var x = 0; x < GameConfig.CAR_QUEUE_COUNT; x++)
-                CreateCarQueues();
+            CreateCarQueues();
 
             GameRunning = true;
             _frameTimer.Start();
@@ -48,14 +44,14 @@ namespace ChrisJones.Frogger.Engine
             if (_frameTimer.ElapsedMilliseconds <= 1000/GameConfig.FPS)
                 return false;
 
-            foreach (var screenObject in _screenObjects.OfType<IMoveable>())
-                screenObject.Move();
+            foreach (var screenObject in _screenObjects)
+                screenObject.AutoMove();
 
-            if (CollisionDetected())
+            if (PlayerCollisionDetected())
                 GameRunning = false;
 
             if (PlayerWinDetected())
-                InitialiseGame();
+                RespawnPlayers();
 
             _frameTimer.Restart();
 
@@ -64,37 +60,30 @@ namespace ChrisJones.Frogger.Engine
 
         public void RenderFrame()
         {
-            foreach (var gameObject in _screenObjects.OfType<IRenderable>())
+            foreach (var gameObject in _screenObjects)
                 gameObject.Render();
         }
 
-        
-        private bool CollisionDetected()
+
+        private void RespawnPlayers()
         {
-            var queueObjects = (from q in _screenObjects.OfType<GameObjectQueue>()
-                                from s in q.ScreenObjects
-                                select s).ToArray();
-
-            var players = _screenObjects.OfType<Player>().ToArray();
-
-            foreach (var player in players)
+            foreach (var player in _screenObjects.OfType<Player>())
             {
-                var collisionObjects = players.Where(p => p != player).Union(queueObjects).ToArray();
-                if (_collisionDetector.CheckForCollisions(player, collisionObjects))
-                {
-                    _screenObjects.Remove(player);
-                    CreateStainForPlayer(player);
-                    return true;
-                }
+                player.Respawn();
             }
-
-            return false;
         }
 
-        private void CreateStainForPlayer(Player player)
+        private bool PlayerCollisionDetected()
         {
-            var stain = _gameObjectFactory.CreateStainFromPlayer(player);
-            _screenObjects.Add(stain);
+            var deadPlayers = (from p in _screenObjects.OfType<Player>().ToArray()
+                               from o in _screenObjects.Except(new[] {p})
+                               where p.OrChildrenCollidedWith(o) || o.OrChildrenCollidedWith(p)
+                               select p).ToArray();
+
+            foreach (var deadPlayer in deadPlayers)
+                ReplacePlayerWithStain(deadPlayer);
+
+            return deadPlayers.Any();
         }
 
         private bool PlayerWinDetected()
@@ -114,7 +103,15 @@ namespace ChrisJones.Frogger.Engine
 
         private void CreateCarQueues()
         {
-            _screenObjects.Add(_queueFactory.CreateNextQueue());
+            for (var x = 0; x < GameConfig.CAR_QUEUE_COUNT; x++)
+                _screenObjects.Add(_queueFactory.CreateNextQueue());
+        }
+
+        private void ReplacePlayerWithStain(Player player)
+        {
+            var stain = _gameObjectFactory.CreateStainFromPlayer(player);
+            _screenObjects.Add(stain);
+            _screenObjects.Remove(player);
         }
     }
 }

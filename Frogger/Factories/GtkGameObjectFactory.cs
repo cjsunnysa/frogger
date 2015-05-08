@@ -2,8 +2,8 @@
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
-using ChrisJones.Frogger.GtkRenderers;
 using ChrisJones.Frogger.Interfaces;
+using ChrisJones.Frogger.Renderers.GtkRenderers;
 using Gtk;
 
 namespace ChrisJones.Frogger.Factories
@@ -36,7 +36,7 @@ namespace ChrisJones.Frogger.Factories
 
         public Stain CreateStainFromPlayer(Player player)
         {
-            var position = player.GetPosition();
+            var position = player.Position;
             return new Stain(new Position(position.XPos, position.YPos), new GtkStainRenderer(_area));
         }
     }

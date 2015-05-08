@@ -1,27 +1,26 @@
 using Cairo;
 using ChrisJones.Frogger.Configuration;
-using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using Gtk;
 
-namespace ChrisJones.Frogger.GtkRenderers
+namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
-    public class GtkRightCarRenderer : GtkCarRenderer
+    public class GtkLeftCarRenderer : GtkCarRenderer
     {
-        public GtkRightCarRenderer(DrawingArea area) : base(area)
+        public GtkLeftCarRenderer(DrawingArea area) : base(area)
         {
         }
 
-        protected override void DrawBody(Context context, GameObject gameObject)
+        protected override void DrawDetail(Context context, GameObject gameObject)
         {
-            var startPosition = gameObject.GetPosition();
-
-            var startx = startPosition.XPos+GameConfig.CAR_DIMENSION.Width;
+            var startPosition = gameObject.Position;
+            
+            var startx = startPosition.XPos;
             var starty = startPosition.YPos;
             var boty = startPosition.YPos + GameConfig.CAR_DIMENSION.Height;
 
             var yoffset = GameConfig.CAR_DIMENSION.Height / 4;
-            var xoffset = (GameConfig.CAR_DIMENSION.Width / 2.8) * -1;
+            var xoffset = GameConfig.CAR_DIMENSION.Width / 2.8;
 
             var doorheight = GameConfig.CAR_DIMENSION.Height / 10;
             var doorTopY = starty + doorheight;
@@ -56,12 +55,12 @@ namespace ChrisJones.Frogger.GtkRenderers
 
             //windscreen large curve.
             context.MoveTo(wind1X, doorTopY);
-            context.RelCurveTo(6, yoffset, 6, GameConfig.CAR_DIMENSION.Height - yoffset, 0, doorBotY - doorTopY);
+            context.RelCurveTo(-6, yoffset, -6, GameConfig.CAR_DIMENSION.Height - yoffset, 0, doorBotY - doorTopY);
 
 
             //windscreen small curve.
             context.MoveTo(wind2X, starty + shieldOffset);
-            context.RelCurveTo(6, 1, 6, shieldHeight - 1, 0, shieldHeight);
+            context.RelCurveTo(-6, 1, -6, shieldHeight - 1, 0, shieldHeight);
 
             //roof bottom line.
             context.RelLineTo(xoffset - shieldWidth, 0);
@@ -102,9 +101,11 @@ namespace ChrisJones.Frogger.GtkRenderers
 
 
             var bootX = strutX + strutWidth;
-            var bootWidth = bootX - startPosition.XPos;
+            var bootWidth = startx + GameConfig.CAR_DIMENSION.Width - bootX;
             var adjustWidth = bootWidth / 4;
-            bootX -= adjustWidth;
+            bootX += adjustWidth;
+            bootWidth -= adjustWidth;
+
 
             //boot top to bot line.
             context.MoveTo(bootX, roofTopY);
@@ -112,20 +113,20 @@ namespace ChrisJones.Frogger.GtkRenderers
 
             //boot width line top.
             context.MoveTo(bootX, roofTopY);
-            context.LineTo(startPosition.XPos, roofTopY);
+            context.LineTo(bootX + bootWidth, roofTopY);
 
             //boot width line bottom.
             context.MoveTo(bootX, roofBotY);
-            context.LineTo(startPosition.XPos, roofBotY);
+            context.LineTo(bootX + bootWidth, roofBotY);
         }
 
-        protected override void DrawDetail(Context context, GameObject gameObject)
+        protected override void DrawBody(Context context, GameObject gameObject)
         {
-            context.MoveTo(gameObject.GetPosition().XPos+GameConfig.CAR_DIMENSION.Width, gameObject.GetPosition().YPos);
-            context.RelLineTo(-GameConfig.CAR_DIMENSION.Width, 0);
-            context.RelLineTo(0, GameConfig.CAR_DIMENSION.Height);
+            context.MoveTo(gameObject.Position.XPos, gameObject.Position.YPos);
             context.RelLineTo(GameConfig.CAR_DIMENSION.Width, 0);
-            context.RelCurveTo(4, -4, 4, GameConfig.CAR_DIMENSION.Height * -1 + 4, 0, GameConfig.CAR_DIMENSION.Height * -1);
+            context.RelLineTo(0, GameConfig.CAR_DIMENSION.Height);
+            context.RelLineTo(GameConfig.CAR_DIMENSION.Width * -1, 0);
+            context.RelCurveTo(-4, -4, -4, GameConfig.CAR_DIMENSION.Height * -1 + 4, 0, GameConfig.CAR_DIMENSION.Height * -1);
         }
     }
 }

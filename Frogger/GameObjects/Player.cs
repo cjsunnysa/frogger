@@ -1,12 +1,11 @@
 ﻿using ChrisJones.Frogger.Drawing2D;
-using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.GameObjects
 {
     public class Player : GameObject
     {
-        public Player(Position initialPosition, IRenderer renderer, Direction initialDirection, int speed, IKeyMapper keyMapper) : base(initialPosition, renderer, initialDirection, speed)
+        public Player(Position spawnPosition, IRenderer renderer, Direction initialDirection, int speed, IKeyMapper keyMapper) : base(spawnPosition, renderer, initialDirection, speed)
         {
             if (keyMapper != null)
             {
@@ -17,12 +16,12 @@ namespace ChrisJones.Frogger.GameObjects
             }
         }
 
-        public override void Move()
-        { }
-
         public bool HasWon()
         {
-            return this.GetPosition().YPos < 0;
+            return this.Position.YPos < 0;
         }
+
+        public override void AutoMove()
+        { }
     }
 }

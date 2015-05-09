@@ -11,16 +11,14 @@ namespace ChrisJones.Frogger
             Build ();
 
             _gameController = new GtkGameEngineController(this);
-            _gameController.Run();
+            _gameController.RunGame();
             
             ShowAll ();
         }
 
-        
-
-        protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
         {
-            _gameController.Stop();
+            _gameController.StopGame();
 
             Application.Quit ();
             a.RetVal = true;

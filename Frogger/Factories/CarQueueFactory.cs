@@ -14,8 +14,8 @@ namespace ChrisJones.Frogger.Factories
     public class CarQueueFactory
     {
         private readonly Direction _initialDirection;
+		private readonly IGameObjectFactory _factory;
         private Direction _nextQueueDirection;
-        private readonly IGameObjectFactory _factory;
         private int _totalQueueCount;
         private int _directionQueueCount;
 
@@ -26,7 +26,7 @@ namespace ChrisJones.Frogger.Factories
             _factory = factory;
         }
 
-        public void Reset()
+        public void Initialise()
         {
             _nextQueueDirection = _initialDirection;
             _totalQueueCount = 0;
@@ -37,29 +37,25 @@ namespace ChrisJones.Frogger.Factories
         {
             var ypos = GameConfig.CAR_QUEUE_START_YPOS + (GameConfig.CAR_QUEUE_YPOS_OFFSET * _totalQueueCount);
 
-
-            GameObjectQueue queue = null;
-
-            switch (_nextQueueDirection)
-            {
-                case Direction.Left:
-                    queue = new LeftGameObjectQueue(ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingLeft, 10);
-                    break;
-                case Direction.Right:
-                    queue = new RightGameObjectQueue(ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingRight, 10);
-                    break;
-            }
+			var _thisQueueDirection = _nextQueueDirection; 
 
             _totalQueueCount++;
             _directionQueueCount++;
 
-            if (_directionQueueCount >= GameConfig.CHANGE_DIRECTION_EVERY_X_QUEUE)
-            {
-                _directionQueueCount = 0;
-                _nextQueueDirection = _nextQueueDirection == Direction.Left ? Direction.Right : Direction.Left;
-            }
+            ResolveNextQueueDirection ();
 
-            return queue;
+			if (_thisQueueDirection == Direction.Left)
+				return new GameObjectQueueLeft (ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingLeft, 10);
+
+			return new GameObjectQueueRight(ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingRight, 10);
         }
+
+		private void ResolveNextQueueDirection ()
+		{
+			if (_directionQueueCount >= GameConfig.CHANGE_DIRECTION_EVERY_X_QUEUE) {
+				_nextQueueDirection = _nextQueueDirection == Direction.Left ? Direction.Right : Direction.Left;
+				_directionQueueCount = 0;
+			}
+		}
     }
 }

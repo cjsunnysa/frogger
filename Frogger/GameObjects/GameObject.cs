@@ -72,8 +72,6 @@ namespace ChrisJones.Frogger.GameObjects
                 childObject.AutoMove();
         }
 
-
-
         public void Move(Direction direction)
         {
             switch (direction)

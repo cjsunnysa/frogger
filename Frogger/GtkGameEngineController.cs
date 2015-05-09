@@ -1,6 +1,8 @@
+using ChrisJones.Frogger.Input;
 using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.Factories;
 using Gtk;
+using System;
 
 namespace ChrisJones.Frogger
 {
@@ -9,52 +11,62 @@ namespace ChrisJones.Frogger
         private readonly GameEngine _engine;
         private readonly GtkGameObjectFactory _factory;
         private readonly DrawingArea _area;
-        private bool _fireAgain = true;
+        private bool _keepLooping = true;
 
         public GtkGameEngineController(Gtk.Window window)
         {
-            var area = new DrawingArea();
-            _area = area;
-            _area.ExposeEvent += CanvasExposed;
-            
-            window.Add(area);
-            
-            var keyMapper = new GdkKeyMovementMapper(Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
-            window.KeyPressEvent += keyMapper.OnKeyPressed;
+			if (window == null)
+				throw new ArgumentNullException ("window");
 
-            _factory = new GtkGameObjectFactory(_area, keyMapper);
+			_area = CreateDrawingSurface(window);
+            _factory = new GtkGameObjectFactory(_area, CreateKeyMapper (window));
             _engine = new GameEngine(_factory);
-            _engine.InitialiseGame();
+
+			_engine.InitialiseGame();
         }
 
-        public void CanvasExposed(object o, ExposeEventArgs args)
-        {
-            _engine.RenderFrame();
-        }
-
-        public void OnKeyPressed(object o, KeyPressEventArgs args)
-        {
-            
-        }
-
-        public void Run()
+        public void RunGame()
         {
             GLib.Timeout.Add(1, Loop);
         }
 
+		private DrawingArea CreateDrawingSurface (Gtk.Window window)
+		{
+			var area = new DrawingArea ();
+			area.ExposeEvent += CanvasExposed;
+
+			window.Add(area);
+
+			return area;
+		}
+
+		private GdkKeyMovementMapper CreateKeyMapper (Gtk.Window window)
+		{
+			var keyMapper = new GdkKeyMovementMapper (Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
+
+			window.KeyPressEvent += keyMapper.OnKeyPressed;
+
+			return keyMapper;
+		}
+
+		private void CanvasExposed(object o, ExposeEventArgs args)
+		{
+			_engine.RenderFrame();
+		}
+
         private bool Loop()
         {
-            if (!_engine.CycleGame())
-                return _fireAgain;
+            if (!_engine.GameCycled())
+                return _keepLooping;
 
             _area.QueueDraw();
 
-            return _fireAgain && _engine.GameRunning;
+            return _keepLooping && _engine.GameIsRunning;
         }
 
-        public void Stop()
+        public void StopGame()
         {
-            _fireAgain = false;
+            _keepLooping = false;
         }
     }
 }

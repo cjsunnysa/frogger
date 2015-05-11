@@ -6,23 +6,26 @@ using System;
 
 namespace ChrisJones.Frogger
 {
+    /// <summary>
+    ///     A wrapper for the GameEngine class that is specific to and dependent on the Gtk# framework.
+    ///     Automates the controlling of the GameEngine class.
+    /// </summary>
     public class GtkGameEngineController
     {
         private readonly GameEngine _engine;
-        private readonly GtkGameObjectFactory _factory;
         private readonly DrawingArea _area;
         private bool _keepLooping = true;
 
+        /// <param name="window">A Gtk.Window which will hold a DrawingArea onto which the game will be drawn.</param>
         public GtkGameEngineController(Gtk.Window window)
         {
-			if (window == null)
-				throw new ArgumentNullException ("window");
+            if (window == null)
+                throw new ArgumentNullException ("window");
 
-			_area = CreateDrawingSurface(window);
-            _factory = new GtkGameObjectFactory(_area, CreateKeyMapper (window));
-            _engine = new GameEngine(_factory);
+            _area = CreateDrawingSurface(window);
+            _engine = new GameEngine(new GtkGameObjectFactory(_area, CreateKeyMapper(window)));
 
-			_engine.InitialiseGame();
+            _engine.InitialiseGame();
         }
 
         public void RunGame()
@@ -30,29 +33,36 @@ namespace ChrisJones.Frogger
             GLib.Timeout.Add(1, Loop);
         }
 
-		private DrawingArea CreateDrawingSurface (Gtk.Window window)
-		{
-			var area = new DrawingArea ();
-			area.ExposeEvent += CanvasExposed;
+        public void StopGame()
+        {
+            _keepLooping = false;
+        }
 
-			window.Add(area);
+        #region private methods
 
-			return area;
-		}
+        private DrawingArea CreateDrawingSurface(Gtk.Window window)
+        {
+            var area = new DrawingArea();
+            area.ExposeEvent += CanvasExposed;
 
-		private GdkKeyMovementMapper CreateKeyMapper (Gtk.Window window)
-		{
-			var keyMapper = new GdkKeyMovementMapper (Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
+            window.Add(area);
 
-			window.KeyPressEvent += keyMapper.OnKeyPressed;
+            return area;
+        }
 
-			return keyMapper;
-		}
+        private GdkKeyMovementMapper CreateKeyMapper(Gtk.Window window)
+        {
+            var keyMapper = new GdkKeyMovementMapper(Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
 
-		private void CanvasExposed(object o, ExposeEventArgs args)
-		{
-			_engine.RenderFrame();
-		}
+            window.KeyPressEvent += keyMapper.OnKeyPressed;
+
+            return keyMapper;
+        }
+
+        private void CanvasExposed(object o, ExposeEventArgs args)
+        {
+            _engine.RenderFrame();
+        }
 
         private bool Loop()
         {
@@ -64,9 +74,6 @@ namespace ChrisJones.Frogger
             return _keepLooping && _engine.GameIsRunning;
         }
 
-        public void StopGame()
-        {
-            _keepLooping = false;
-        }
+        #endregion
     }
 }

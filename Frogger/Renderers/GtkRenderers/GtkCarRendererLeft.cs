@@ -5,9 +5,12 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
-    public class GtkLeftCarRenderer : GtkCarRenderer
+    /// <summary>
+    ///     Used to draw a left-facing car object to a Gtk.DrawingArea.
+    /// </summary>
+    public class GtkCarRendererLeft : GtkCarRenderer
     {
-        public GtkLeftCarRenderer(DrawingArea area) : base(area)
+        public GtkCarRendererLeft(DrawingArea area) : base(area)
         {
         }
 

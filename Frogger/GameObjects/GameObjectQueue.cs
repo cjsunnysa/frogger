@@ -8,8 +8,15 @@ using ChrisJones.Frogger.Renderers;
 
 namespace ChrisJones.Frogger.GameObjects
 {
+    /// <summary>
+    ///     The base class for GameObjectQueues. Queues for a specific direction inherit from this class.
+    ///     Creates a queue of GameObjects and moves them in a direction. When an object reaches the end of the queue it is removed from the screen and waits to be added to the start of the queue.
+    /// </summary>
     public abstract class GameObjectQueue : GameObject
     {
+        /// <summary>
+        ///     Used to hold offscreeen GameObjects and the distance they will be added from the last object in the queue.
+        /// </summary>
         internal class OffscreenQueueObject
         {
             public int DistanceToWait { get; set; }
@@ -23,6 +30,11 @@ namespace ChrisJones.Frogger.GameObjects
         protected abstract bool ObjectPastEndOfQueue(GameObject gameObject);
         protected abstract bool EnumerateXPosRange(ref int xpos);
     
+        /// <param name="intitialPosition">Only the YPos of the Position is used. The vertical position of the queue on the screeen.</param>
+        /// <param name="initialDirection">The direction all objects in the queue are traveling.</param>
+        /// <param name="moveSpeed">The horizontal distance all object of the queue will travel each frame that is rendered.</param>
+        /// <param name="childCreateMethod">The factory method that will create the objects managed by this queue.</param>
+        /// <param name="numQueueObjects">The maximum number of objects the queue can create and manage.</param>
         protected GameObjectQueue(Position intitialPosition, Direction initialDirection, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects)
             : base(intitialPosition, new NullRenderer(), initialDirection, moveSpeed)
         {
@@ -32,11 +44,22 @@ namespace ChrisJones.Frogger.GameObjects
             CreateQueueObjects(childCreateMethod, numQueueObjects);
         }
 
+        public override void AutoMove()
+        {
+            CycleQueue();
+        }
+
+        protected int GenerateDistance()
+        {
+            return _numGenerator.Next(GameConfig.CAR_MIN_DISTANCE, GameConfig.CAR_MAX_DISTANCE);
+        }
+
+        #region private methods
         private void CreateQueueObjects(ChildObjectCreateMethod factoryMethod, int maxCreateCount)
         {
             var createdCount = 0;
 
-            var xpos = (int) Position.XPos;
+            var xpos = (int)Position.XPos;
             do
             {
                 CreateQueueObject(factoryMethod, xpos);
@@ -48,7 +71,7 @@ namespace ChrisJones.Frogger.GameObjects
 
             AddRemainderOffscreen(factoryMethod, maxCreateCount, createdCount);
         }
-        
+
         private void AddRemainderOffscreen(ChildObjectCreateMethod factoryMethod, int maxCreateCount, int createdCount)
         {
             var remainderCount = maxCreateCount - createdCount;
@@ -59,7 +82,7 @@ namespace ChrisJones.Frogger.GameObjects
                     Object = factoryMethod(new Position(0, 0))
                 });
         }
-        
+
         private void CreateQueueObject(ChildObjectCreateMethod factoryMethod, int xPos)
         {
             var newObject = factoryMethod(new Position(xPos, Position.YPos));
@@ -78,7 +101,7 @@ namespace ChrisJones.Frogger.GameObjects
                 Object = gameObject
             });
         }
-        
+
         private void AddOffscreenObjectToOnscreen()
         {
             var offscreenObjectToAdd = _offScreenObjects.FirstOrDefault();
@@ -87,7 +110,7 @@ namespace ChrisJones.Frogger.GameObjects
 
             var distanceToLastObject = GetDistanceToLastObject();
 
-            if (distanceToLastObject < offscreenObjectToAdd.DistanceToWait) 
+            if (distanceToLastObject < offscreenObjectToAdd.DistanceToWait)
                 return;
 
             _offScreenObjects.Remove(offscreenObjectToAdd);
@@ -106,15 +129,7 @@ namespace ChrisJones.Frogger.GameObjects
 
             AddOffscreenObjectToOnscreen();
         }
+        #endregion
 
-        protected int GenerateDistance()
-        {
-            return _numGenerator.Next(GameConfig.CAR_MIN_DISTANCE, GameConfig.CAR_MAX_DISTANCE);
-        }
-
-        public override void AutoMove()
-        {
-            CycleQueue();
-        }
     }
 }

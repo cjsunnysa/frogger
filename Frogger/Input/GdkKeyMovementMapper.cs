@@ -4,6 +4,9 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Input
 {
+    /// <summary>
+    ///     This subscribes to the Gtk.Window OnKeyPressed event and maps the key to a movement event that a GameObject can subscribe to.
+    /// </summary>
     public class GdkKeyMovementMapper : IKeyMapper
     {
         private readonly Gdk.Key _upKey;
@@ -11,6 +14,10 @@ namespace ChrisJones.Frogger.Input
         private readonly Gdk.Key _leftKey;
         private readonly Gdk.Key _rightKey;
 
+        /// <param name="upKey">The key to move the GameObject upward.</param>
+        /// <param name="downKey">The key to move the GameObject downward.</param>
+        /// <param name="leftKey">The key to move the GameObject left.</param>
+        /// <param name="rightKey">The key to move the GameObject right.</param>
         public GdkKeyMovementMapper(Gdk.Key upKey, Gdk.Key downKey, Gdk.Key leftKey, Gdk.Key rightKey)
         {
             _upKey = upKey;

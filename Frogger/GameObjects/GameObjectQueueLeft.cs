@@ -5,6 +5,9 @@ using ChrisJones.Frogger.Drawing2D;
 
 namespace ChrisJones.Frogger.GameObjects
 {
+    /// <summary>
+    ///     A GameObjectQueue that cycles from right to left.
+    /// </summary>
     public class GameObjectQueueLeft : GameObjectQueue
     {
         public GameObjectQueueLeft(int yPos, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects)

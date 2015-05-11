@@ -1,6 +1,5 @@
 ﻿using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
-using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
 using ChrisJones.Frogger.Renderers.GtkRenderers;
@@ -8,6 +7,10 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Factories
 {
+    /// <summary>
+    ///     Creates the game objects used to represent the game on-screen.
+    ///     Creates the game objects with renderers for the Gtk# platform.
+    /// </summary>
     public class GtkGameObjectFactory : IGameObjectFactory
     {
         private readonly DrawingArea _area;
@@ -26,12 +29,12 @@ namespace ChrisJones.Frogger.Factories
 
         public Car CreateCarDrivingLeft(Position startPosition)
         {
-            return new Car(startPosition, new GtkLeftCarRenderer(_area), Direction.Left, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkCarRendererLeft(_area), Direction.Left, GameConfig.CAR_SPEED);
         }
 
         public Car CreateCarDrivingRight(Position startPosition)
         {
-            return new Car(startPosition, new GtkRightCarRenderer(_area), Direction.Right, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkCarRendererRight(_area), Direction.Right, GameConfig.CAR_SPEED);
         }
 
         public Stain CreateStainFromPlayer(Player player)

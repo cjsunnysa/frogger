@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChrisJones.Frogger.Drawing2D
 {
+    /// <summary>
+    ///     Used to represent the collision area of an object which can differ from that object's dimensions.
+    /// </summary>
     public class HitTestArea
     {
         public Position AreaPosition { get; private set; }

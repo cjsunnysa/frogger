@@ -73,12 +73,12 @@
     <Compile Include="Factories\CarQueueFactory.cs" />
     <Compile Include="Configuration\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
-    <Compile Include="GameObjects\LeftGameObjectQueue.cs" />
-    <Compile Include="GameObjects\RightGameObjectQueue.cs" />
+    <Compile Include="GameObjects\GameObjectQueueLeft.cs" />
+    <Compile Include="GameObjects\GameObjectQueueRight.cs" />
     <Compile Include="GameObjects\Stain.cs" />
     <Compile Include="Renderers\NullRenderer.cs" />
-    <Compile Include="Renderers\GtkRenderers\GtkLeftCarRenderer.cs" />
-    <Compile Include="Renderers\GtkRenderers\GtkRightCarRenderer.cs" />
+    <Compile Include="Renderers\GtkRenderers\GtkCarRendererLeft.cs" />
+    <Compile Include="Renderers\GtkRenderers\GtkCarRendererRight.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkStainRenderer.cs" />
     <Compile Include="Interfaces\IKeyMapper.cs" />
     <Compile Include="GameObjects\Car.cs" />
@@ -103,7 +103,5 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Input\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

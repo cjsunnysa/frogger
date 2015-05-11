@@ -10,21 +10,25 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Engine
 {
+    /// <summary>
+    ///     Handles the orchestration of the game. Creates the game objects, handles their movement and interaction.
+    /// </summary>
     public class GameEngine
     {
         public bool GameIsRunning { get; private set; }
         
         private readonly List<GameObject> _gameObjects;
         private readonly Stopwatch _frameTimer;
-        private readonly CarQueueFactory _queueFactory;
+        private readonly GameObjectQueueFactory _queueFactory;
         private readonly IGameObjectFactory _gameObjectFactory;
 
+        /// <param name="gameObjectFactory">Creates all the game objects for the game.</param>
         public GameEngine(IGameObjectFactory gameObjectFactory)
         {
             _gameObjectFactory = gameObjectFactory;
             _gameObjects = new List<GameObject>();
             _frameTimer = new Stopwatch();
-            _queueFactory= new CarQueueFactory(Direction.Left, gameObjectFactory);
+            _queueFactory= new GameObjectQueueFactory(gameObjectFactory);
         }
 
         public void InitialiseGame()
@@ -50,8 +54,8 @@ namespace ChrisJones.Frogger.Engine
 
             if (PlayerWinDetected())
                 RespawnPlayers();
-			else if (PlayerCollisionDetected())
-				GameIsRunning = false;
+            else if (PlayerCollisionDetected())
+                GameIsRunning = false;
 
             _frameTimer.Restart();
 
@@ -64,6 +68,7 @@ namespace ChrisJones.Frogger.Engine
                 gameObject.Render();
         }
 
+        #region private methods
         private void RespawnPlayers()
         {
             foreach (var player in _gameObjects.OfType<Player>())
@@ -75,8 +80,8 @@ namespace ChrisJones.Frogger.Engine
         private bool PlayerCollisionDetected()
         {
             var deadPlayers = (from p in _gameObjects.OfType<Player>().ToArray()
-                               from o in _gameObjects.Except(new[] {p})
-                               where p.OrChildrenCollidedWith(o) || o.OrChildrenCollidedWith(p)
+                               from o in _gameObjects.Except(new[] { p })
+                               where p.CollidedWith(o) || o.CollidedWith(p)
                                select p).ToArray();
 
             foreach (var deadPlayer in deadPlayers)
@@ -96,7 +101,7 @@ namespace ChrisJones.Frogger.Engine
                 _gameObjectFactory.CreatePlayer(
                     new Position(GameConfig.PLAYER_START_POSITION.XPos, GameConfig.PLAYER_START_POSITION.YPos),
                     Direction.Up);
-            
+
             _gameObjects.Add(player);
         }
 
@@ -111,6 +116,7 @@ namespace ChrisJones.Frogger.Engine
             var stain = _gameObjectFactory.CreateStainFromPlayer(player);
             _gameObjects.Add(stain);
             _gameObjects.Remove(player);
-        }
+        } 
+        #endregion
     }
 }

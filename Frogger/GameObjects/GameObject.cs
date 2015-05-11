@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿    using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ChrisJones.Frogger.Drawing2D;
@@ -6,18 +6,28 @@ using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.GameObjects
 {
+    /// <summary>
+    ///     The base class of all interactive game objects.
+    ///     Handles movement, rendering and collisions of game objects.
+    ///     Can have children GameObject objects.
+    /// </summary>
     public abstract class GameObject
     {
         public Position Position { get; private set; }
         public HitTestArea HitTestArea { get; private set; }
         
-        private readonly IRenderer _renderer;
-        private readonly int _moveSpeed;
-        private Direction _direction;
-        private Position _spawnPosition;
-        
         protected List<GameObject> ChildObjects { get; private set; }
         
+        private readonly IRenderer _renderer;
+        private readonly Direction _direction;
+        private readonly int _moveSpeed;
+        private Position _spawnPosition;
+        
+        
+        /// <param name="spawnPosition">The starting position on-screen for this object.</param>
+        /// <param name="renderer">Used to render a visual representation of this object to a surface.</param>
+        /// <param name="initialDirection">This direction this object or its children face when first created.</param>
+        /// <param name="moveSpeed">The distance this object can travel on-screen each game-cycle.</param>
         protected GameObject(Position spawnPosition, IRenderer renderer, Direction initialDirection, int moveSpeed)
         {
             Position = new Position(spawnPosition.XPos, spawnPosition.YPos);
@@ -29,6 +39,27 @@ namespace ChrisJones.Frogger.GameObjects
             _moveSpeed = moveSpeed;
             _spawnPosition = spawnPosition;
         }
+
+        protected void MoveRight()
+        {
+            Position.SetPosition(Position.XPos + _moveSpeed, Position.YPos);
+        }
+
+        protected void MoveLeft()
+        {
+            Position.SetPosition(Position.XPos - _moveSpeed, Position.YPos);
+        }
+
+        protected void MoveUp()
+        {
+            Position.SetPosition(Position.XPos, Position.YPos - _moveSpeed);
+        }
+
+        protected void MoveDown()
+        {
+            Position.SetPosition(Position.XPos, Position.YPos + _moveSpeed);
+        }
+
 
         public void ChangeSpawnPosition(Position position)
         {
@@ -48,20 +79,10 @@ namespace ChrisJones.Frogger.GameObjects
                 childObject.Render();
         }
 
-        public void SetDirection(Direction direction)
-        {
-            _direction = direction;
-        }
-
-        public Direction GetDirection()
-        {
-            return _direction;
-        }
-
-        public bool OrChildrenCollidedWith(GameObject otherObject)
+        public bool CollidedWith(GameObject otherObject)
         {
             return HitTestArea.HasCollidedWith(otherObject.HitTestArea) ||
-                   ChildObjects.Any(child => child.OrChildrenCollidedWith(otherObject));
+                   ChildObjects.Any(child => child.CollidedWith(otherObject));
         }
 
         public virtual void AutoMove()
@@ -89,26 +110,6 @@ namespace ChrisJones.Frogger.GameObjects
                     MoveDown();
                     break;
             }
-        }
-        
-        public void MoveRight()
-        {
-            Position.SetPosition(Position.XPos + _moveSpeed, Position.YPos);
-        }
-
-        public void MoveLeft()
-        {
-            Position.SetPosition(Position.XPos - _moveSpeed, Position.YPos);
-        }
-
-        public void MoveUp()
-        {
-            Position.SetPosition(Position.XPos, Position.YPos - _moveSpeed);
-        }
-
-        public void MoveDown()
-        {
-            Position.SetPosition(Position.XPos, Position.YPos + _moveSpeed);
         }
     }
 }

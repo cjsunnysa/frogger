@@ -7,6 +7,9 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
+    /// <summary>
+    ///     Base class of the renderer for the Gtk platform. Used to draw car objects to a Gtk.DrawingArea.
+    /// </summary>
     public abstract class GtkCarRenderer : GtkRenderer
     {
         protected GtkCarRenderer(DrawingArea area)

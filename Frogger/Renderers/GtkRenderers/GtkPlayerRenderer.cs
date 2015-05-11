@@ -7,6 +7,9 @@ using Gtk;
 
 namespace ChrisJones.Frogger.Renderers.GtkRenderers
 {
+    /// <summary>
+    ///     Used to draw a player representation to a Gtk.DrawingArea.
+    /// </summary>
     public class GtkPlayerRenderer : GtkRenderer
     {
         public GtkPlayerRenderer(DrawingArea area) : base(area)

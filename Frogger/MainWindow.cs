@@ -16,7 +16,7 @@ namespace ChrisJones.Frogger
             ShowAll ();
         }
 
-		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+        protected void OnDeleteEvent (object sender, DeleteEventArgs a)
         {
             _gameController.StopGame();
 

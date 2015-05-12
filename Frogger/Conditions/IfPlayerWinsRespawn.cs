@@ -10,7 +10,7 @@ namespace ChrisJones.Frogger.Conditions
     {
         public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory, GameObjectQueueFactory queueFactory)
         {
-            var playerWon = gameObjects.OfType<Player>().Any(p => p.HasWon());
+            var playerWon = gameObjects.Any(p => p.HasWon());
             if (!playerWon)
                 return true;
             

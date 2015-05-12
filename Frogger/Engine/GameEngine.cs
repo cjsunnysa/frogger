@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using ChrisJones.Frogger.Configuration;
@@ -21,14 +22,27 @@ namespace ChrisJones.Frogger.Engine
         private readonly Stopwatch _frameTimer;
         private readonly GameObjectQueueFactory _queueFactory;
         private readonly IGameObjectFactory _gameObjectFactory;
+        private readonly IGameCheckProcedure[] _winCheckProcedures;
+        private readonly IGameCheckProcedure[] _loseCheckProcedures;
 
         /// <param name="gameObjectFactory">Creates all the game objects for the game.</param>
-        public GameEngine(IGameObjectFactory gameObjectFactory)
+        /// <param name="winCheckProcedures">Methods to be executed when Player wins the game.</param>
+        /// <param name="loseCheckProcedures">Methods to be executed when Player loses the game.</param>
+        public GameEngine(IGameObjectFactory gameObjectFactory, IGameCheckProcedure[] winCheckProcedures, IGameCheckProcedure[] loseCheckProcedures)
         {
             _gameObjectFactory = gameObjectFactory;
             _gameObjects = new List<GameObject>();
             _frameTimer = new Stopwatch();
             _queueFactory= new GameObjectQueueFactory(gameObjectFactory);
+            
+            if (winCheckProcedures == null || winCheckProcedures.Any() == false)
+                throw new ArgumentNullException("winCheckProcedures");
+
+            if (loseCheckProcedures == null || loseCheckProcedures.Any() == false)
+                throw new ArgumentNullException("loseCheckProcedures");
+            
+            _winCheckProcedures = winCheckProcedures;
+            _loseCheckProcedures = loseCheckProcedures;
         }
 
         public void InitialiseGame()
@@ -52,11 +66,8 @@ namespace ChrisJones.Frogger.Engine
             foreach (var screenObject in _gameObjects)
                 screenObject.AutoMove();
 
-            if (PlayerWinDetected())
-                RespawnPlayers();
-            else if (PlayerCollisionDetected())
-                GameIsRunning = false;
-
+            GameIsRunning = PerformWinProcedures() && PerformLoseProcedures();
+            
             _frameTimer.Restart();
 
             return true;
@@ -69,30 +80,33 @@ namespace ChrisJones.Frogger.Engine
         }
 
         #region private methods
-        private void RespawnPlayers()
+
+        private bool PerformLoseProcedures()
         {
-            foreach (var player in _gameObjects.OfType<Player>())
+            var continueRunning = true;
+            
+            foreach (var proc in _loseCheckProcedures)
             {
-                player.Respawn();
+                var keepRunning = proc.Execute(_gameObjects, _gameObjectFactory, _queueFactory);
+                if (continueRunning)
+                    continueRunning = keepRunning;
             }
+
+            return continueRunning;
         }
 
-        private bool PlayerCollisionDetected()
+        private bool PerformWinProcedures()
         {
-            var deadPlayers = (from p in _gameObjects.OfType<Player>().ToArray()
-                               from o in _gameObjects.Except(new[] { p })
-                               where p.CollidedWith(o) || o.CollidedWith(p)
-                               select p).ToArray();
+            var continueRunning = true;
 
-            foreach (var deadPlayer in deadPlayers)
-                ReplacePlayerWithStain(deadPlayer);
+            foreach (var proc in _winCheckProcedures)
+            {
+                var keepRunning = proc.Execute(_gameObjects, _gameObjectFactory, _queueFactory);
+                if (continueRunning)
+                    continueRunning = keepRunning;
+            }
 
-            return deadPlayers.Any();
-        }
-
-        private bool PlayerWinDetected()
-        {
-            return _gameObjects.OfType<Player>().Any(player => player.HasWon());
+            return continueRunning;
         }
 
         private void CreatePlayers()
@@ -111,12 +125,6 @@ namespace ChrisJones.Frogger.Engine
                 _gameObjects.Add(_queueFactory.CreateNextQueue());
         }
 
-        private void ReplacePlayerWithStain(Player player)
-        {
-            var stain = _gameObjectFactory.CreateStainFromPlayer(player);
-            _gameObjects.Add(stain);
-            _gameObjects.Remove(player);
-        } 
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.Factories;
 using Gtk;
 using System;
+using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger
 {
@@ -23,7 +24,12 @@ namespace ChrisJones.Frogger
                 throw new ArgumentNullException ("window");
 
             _area = CreateDrawingSurface(window);
-            _engine = new GameEngine(new GtkGameObjectFactory(_area, CreateKeyMapper(window)));
+
+            var factory = new GtkGameObjectFactory(_area, CreateKeyMapper(window));
+            var winProcedures = new IGameCheckProcedure[] { new IfPlayerWinsRespawn() };
+            var loseProcedures = new IGameCheckProcedure[] { new IfPlayerLosesStain() };
+
+            _engine = new GameEngine(factory, winProcedures, loseProcedures);
 
             _engine.InitialiseGame();
         }

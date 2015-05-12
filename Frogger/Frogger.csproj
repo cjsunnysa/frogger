@@ -70,12 +70,15 @@
     <Compile Include="Delegates\OnMoveEvent.cs" />
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
+    <Compile Include="Engine\IfPlayerLosesStain.cs" />
+    <Compile Include="Engine\IfPlayerWinsRespawn.cs" />
     <Compile Include="Factories\CarQueueFactory.cs" />
     <Compile Include="Configuration\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
     <Compile Include="GameObjects\GameObjectQueueLeft.cs" />
     <Compile Include="GameObjects\GameObjectQueueRight.cs" />
     <Compile Include="GameObjects\Stain.cs" />
+    <Compile Include="Interfaces\IGameCheckProcedure.cs" />
     <Compile Include="Renderers\NullRenderer.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkCarRendererLeft.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkCarRendererRight.cs" />

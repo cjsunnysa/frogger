@@ -20,15 +20,17 @@ namespace ChrisJones.Frogger.GameObjects
         
         private readonly IRenderer _renderer;
         private readonly Direction _direction;
+        private readonly IWinCondition[] _winConditions;
         private readonly int _moveSpeed;
         private Position _spawnPosition;
-        
-        
+
+
         /// <param name="spawnPosition">The starting position on-screen for this object.</param>
         /// <param name="renderer">Used to render a visual representation of this object to a surface.</param>
         /// <param name="initialDirection">This direction this object or its children face when first created.</param>
         /// <param name="moveSpeed">The distance this object can travel on-screen each game-cycle.</param>
-        protected GameObject(Position spawnPosition, IRenderer renderer, Direction initialDirection, int moveSpeed)
+        /// <param name="winConditions">Used to determine if this object has won the game.</param>
+        protected GameObject(Position spawnPosition, IRenderer renderer, Direction initialDirection, int moveSpeed, IWinCondition[] winConditions)
         {
             Position = new Position(spawnPosition.XPos, spawnPosition.YPos);
             HitTestArea = new HitTestArea(new Position(0, 0), 0, 0);
@@ -38,6 +40,7 @@ namespace ChrisJones.Frogger.GameObjects
             _direction = initialDirection;
             _moveSpeed = moveSpeed;
             _spawnPosition = spawnPosition;
+            _winConditions = winConditions;
         }
 
         protected void MoveRight()
@@ -110,6 +113,11 @@ namespace ChrisJones.Frogger.GameObjects
                     MoveDown();
                     break;
             }
+        }
+
+        public bool HasWon()
+        {
+            return _winConditions != null && _winConditions.Any(c => c.WonTheGame(this));
         }
     }
 }

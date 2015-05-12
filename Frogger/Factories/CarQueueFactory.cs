@@ -41,9 +41,9 @@ namespace ChrisJones.Frogger.Factories
             ResolveNextQueueDirection ();
 
             if (thisQueueDirection == Direction.Left)
-                return new GameObjectQueueLeft (ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingLeft, 10);
+                return new GameObjectQueueLeft (ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingLeft, 10, null);
 
-            return new GameObjectQueueRight(ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingRight, 10);
+            return new GameObjectQueueRight(ypos, GameConfig.CAR_SPEED, _factory.CreateCarDrivingRight, 10, null);
         }
 
         #region private methods

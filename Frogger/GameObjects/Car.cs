@@ -12,8 +12,8 @@ namespace ChrisJones.Frogger.GameObjects
         /// <param name="renderer">Used to render this object to a drawing surface.</param>
         /// <param name="initialDirection">Which direction this object initially faces.</param>
         /// <param name="speed">The distance travelled per game-cycle.</param>
-        public Car(Position spawnPosition, IRenderer renderer, Direction initialDirection, int speed) 
-            : base(spawnPosition, renderer, initialDirection, speed)
+        public Car(Position spawnPosition, IRenderer renderer, Direction initialDirection, int speed, IWinCondition[] winConditions) 
+            : base(spawnPosition, renderer, initialDirection, speed, winConditions)
         {
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Delegates;
 using ChrisJones.Frogger.Drawing2D;
+using ChrisJones.Frogger.Interfaces;
 using ChrisJones.Frogger.Renderers;
 
 namespace ChrisJones.Frogger.GameObjects
@@ -29,14 +30,15 @@ namespace ChrisJones.Frogger.GameObjects
         protected abstract int GetDistanceToLastObject();
         protected abstract bool ObjectPastEndOfQueue(GameObject gameObject);
         protected abstract bool EnumerateXPosRange(ref int xpos);
-    
+
         /// <param name="intitialPosition">Only the YPos of the Position is used. The vertical position of the queue on the screeen.</param>
         /// <param name="initialDirection">The direction all objects in the queue are traveling.</param>
         /// <param name="moveSpeed">The horizontal distance all object of the queue will travel each frame that is rendered.</param>
         /// <param name="childCreateMethod">The factory method that will create the objects managed by this queue.</param>
         /// <param name="numQueueObjects">The maximum number of objects the queue can create and manage.</param>
-        protected GameObjectQueue(Position intitialPosition, Direction initialDirection, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects)
-            : base(intitialPosition, new NullRenderer(), initialDirection, moveSpeed)
+        /// <param name="winConditions">Used to determine if this object has won the game.</param>
+        protected GameObjectQueue(Position intitialPosition, Direction initialDirection, int moveSpeed, ChildObjectCreateMethod childCreateMethod, int numQueueObjects, IWinCondition[] winConditions)
+            : base(intitialPosition, new NullRenderer(), initialDirection, moveSpeed, winConditions)
         {
             _offScreenObjects = new List<OffscreenQueueObject>();
             _numGenerator = new Random();

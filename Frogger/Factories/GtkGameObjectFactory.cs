@@ -24,17 +24,19 @@ namespace ChrisJones.Frogger.Factories
 
         public Player CreatePlayer(Position startPosition, Direction initialDirection)
         {
-            return new Player(startPosition, new GtkPlayerRenderer(_area), initialDirection, GameConfig.PLAYER_SPEED, _playerKeyMapper);
+            var winConditions = new IWinCondition[] {new PlayerReachesOtherSide()};
+            
+            return new Player(startPosition, new GtkPlayerRenderer(_area), initialDirection, GameConfig.PLAYER_SPEED, _playerKeyMapper, winConditions);
         }
 
         public Car CreateCarDrivingLeft(Position startPosition)
         {
-            return new Car(startPosition, new GtkCarRendererLeft(_area), Direction.Left, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkCarRendererLeft(_area), Direction.Left, GameConfig.CAR_SPEED, null);
         }
 
         public Car CreateCarDrivingRight(Position startPosition)
         {
-            return new Car(startPosition, new GtkCarRendererRight(_area), Direction.Right, GameConfig.CAR_SPEED);
+            return new Car(startPosition, new GtkCarRendererRight(_area), Direction.Right, GameConfig.CAR_SPEED, null);
         }
 
         public Stain CreateStainFromPlayer(Player player)

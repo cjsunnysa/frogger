@@ -14,7 +14,7 @@ namespace ChrisJones.Frogger.GameObjects
         /// <param name="initialDirection">The direction this object faces when first created.</param>
         /// <param name="speed">The distance this object can travel when moved.</param>
         /// <param name="keyMapper">Used to map keypressed events to movement commands.</param>
-        public Player(Position spawnPosition, IRenderer renderer, Direction initialDirection, int speed, IKeyMapper keyMapper) : base(spawnPosition, renderer, initialDirection, speed)
+        public Player(Position spawnPosition, IRenderer renderer, Direction initialDirection, int speed, IKeyMapper keyMapper, IWinCondition[] winConditions) : base(spawnPosition, renderer, initialDirection, speed, winConditions)
         {
             if (keyMapper != null)
             {
@@ -23,11 +23,6 @@ namespace ChrisJones.Frogger.GameObjects
                 keyMapper.OnMoveLeftEvent += base.MoveLeft;
                 keyMapper.OnMoveRightEvent += base.MoveRight;
             }
-        }
-
-        public bool HasWon()
-        {
-            return this.Position.YPos < 0;
         }
 
         public override void AutoMove()

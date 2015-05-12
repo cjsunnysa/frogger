@@ -6,9 +6,9 @@ using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.Conditions
 {
-    public class IfPlayerWinsRespawn : IGameCheckProcedure
+    public class IfPlayerWinsRespawn : IGameCycleProcedure
     {
-        public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory, GameObjectQueueFactory queueFactory)
+        public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory)
         {
             var playerWon = gameObjects.Any(p => p.HasWon());
             if (!playerWon)

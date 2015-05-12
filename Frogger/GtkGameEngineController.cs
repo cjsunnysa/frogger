@@ -26,11 +26,11 @@ namespace ChrisJones.Frogger
 
             _area = CreateDrawingSurface(window);
 
+            var createProcedure = new CreateTwoWayTrafficObjects();
             var factory = new GtkGameObjectFactory(_area, CreateKeyMapper(window));
-            var winProcedures = new IGameCheckProcedure[] { new IfPlayerWinsRespawn() };
-            var loseProcedures = new IGameCheckProcedure[] { new IfPlayerLosesStain() };
-
-            _engine = new GameEngine(factory, winProcedures, loseProcedures);
+            var gameProcedures = new IGameCycleProcedure[] { new IfPlayerWinsRespawn(), new IfPlayerLosesStain() };
+            
+            _engine = new GameEngine(createProcedure, factory, gameProcedures);
 
             _engine.InitialiseGame();
         }

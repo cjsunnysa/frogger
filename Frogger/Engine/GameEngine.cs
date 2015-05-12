@@ -18,41 +18,32 @@ namespace ChrisJones.Frogger.Engine
     {
         public bool GameIsRunning { get; private set; }
         
-        private readonly List<GameObject> _gameObjects;
+        private List<GameObject> _gameObjects;
         private readonly Stopwatch _frameTimer;
-        private readonly GameObjectQueueFactory _queueFactory;
+        private readonly IGameObjectCreationProcedure _creationProcedure;
         private readonly IGameObjectFactory _gameObjectFactory;
-        private readonly IGameCheckProcedure[] _winCheckProcedures;
-        private readonly IGameCheckProcedure[] _loseCheckProcedures;
+        private readonly IGameCycleProcedure[] _gameProcedures;
 
-        /// <param name="gameObjectFactory">Creates all the game objects for the game.</param>
-        /// <param name="winCheckProcedures">Methods to be executed when Player wins the game.</param>
-        /// <param name="loseCheckProcedures">Methods to be executed when Player loses the game.</param>
-        public GameEngine(IGameObjectFactory gameObjectFactory, IGameCheckProcedure[] winCheckProcedures, IGameCheckProcedure[] loseCheckProcedures)
+        /// <param name="creationProcedure">Returns a list of all game objects for the game.</param>
+        /// <param name="gameObjectFactory">Creates game objects.</param>
+        /// <param name="gameProcedures">Performs win/loss condition checks and responses.</param>
+        public GameEngine(IGameObjectCreationProcedure creationProcedure, IGameObjectFactory gameObjectFactory, IGameCycleProcedure[] gameProcedures)
         {
+            _creationProcedure = creationProcedure;
             _gameObjectFactory = gameObjectFactory;
-            _gameObjects = new List<GameObject>();
             _frameTimer = new Stopwatch();
-            _queueFactory= new GameObjectQueueFactory(gameObjectFactory);
             
-            if (winCheckProcedures == null || winCheckProcedures.Any() == false)
-                throw new ArgumentNullException("winCheckProcedures");
+            if (gameProcedures == null || gameProcedures.Any() == false)
+                throw new ArgumentNullException("gameProcedures");
 
-            if (loseCheckProcedures == null || loseCheckProcedures.Any() == false)
-                throw new ArgumentNullException("loseCheckProcedures");
-            
-            _winCheckProcedures = winCheckProcedures;
-            _loseCheckProcedures = loseCheckProcedures;
+            _gameProcedures = gameProcedures;
         }
 
         public void InitialiseGame()
         {
-            _gameObjects.Clear();
-            _queueFactory.Initialise();
+            _gameObjectFactory.Initialise();
+            _gameObjects = _creationProcedure.CreateGameObjects(_gameObjectFactory);
             
-            CreatePlayers();
-            CreateCarQueues();
-
             GameIsRunning = true;
 
             _frameTimer.Start();
@@ -66,7 +57,7 @@ namespace ChrisJones.Frogger.Engine
             foreach (var screenObject in _gameObjects)
                 screenObject.AutoMove();
 
-            GameIsRunning = PerformWinProcedures() && PerformLoseProcedures();
+            GameIsRunning = PerformGameProcedures();
             
             _frameTimer.Restart();
 
@@ -81,50 +72,19 @@ namespace ChrisJones.Frogger.Engine
 
         #region private methods
 
-        private bool PerformLoseProcedures()
+        private bool PerformGameProcedures()
         {
             var continueRunning = true;
             
-            foreach (var proc in _loseCheckProcedures)
+            foreach (var proc in _gameProcedures)
             {
-                var keepRunning = proc.Execute(_gameObjects, _gameObjectFactory, _queueFactory);
+                var keepRunning = proc.Execute(_gameObjects, _gameObjectFactory);
                 if (continueRunning)
                     continueRunning = keepRunning;
             }
 
             return continueRunning;
         }
-
-        private bool PerformWinProcedures()
-        {
-            var continueRunning = true;
-
-            foreach (var proc in _winCheckProcedures)
-            {
-                var keepRunning = proc.Execute(_gameObjects, _gameObjectFactory, _queueFactory);
-                if (continueRunning)
-                    continueRunning = keepRunning;
-            }
-
-            return continueRunning;
-        }
-
-        private void CreatePlayers()
-        {
-            var player =
-                _gameObjectFactory.CreatePlayer(
-                    new Position(GameConfig.PLAYER_START_POSITION.XPos, GameConfig.PLAYER_START_POSITION.YPos),
-                    Direction.Up);
-
-            _gameObjects.Add(player);
-        }
-
-        private void CreateCarQueues()
-        {
-            for (var x = 0; x < GameConfig.CAR_QUEUE_COUNT; x++)
-                _gameObjects.Add(_queueFactory.CreateNextQueue());
-        }
-
         #endregion
     }
 }

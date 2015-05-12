@@ -6,9 +6,9 @@ using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.Conditions
 {
-    public class IfPlayerLosesStain : IGameCheckProcedure
+    public class IfPlayerLosesStain : IGameCycleProcedure
     {
-        public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory, GameObjectQueueFactory queueFactory)
+        public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory)
         {
             return NoCollisionDetected(gameObjects, factory);
         }

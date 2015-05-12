@@ -16,11 +16,19 @@ namespace ChrisJones.Frogger.Factories
     {
         private readonly DrawingArea _area;
         private readonly IKeyMapper _playerKeyMapper;
+        private readonly GameObjectQueueFactory _queueFactory;
 
         public GtkGameObjectFactory(DrawingArea area, IKeyMapper playerKeyMapper)
         {
             _playerKeyMapper = playerKeyMapper;
+            _queueFactory = new GameObjectQueueFactory(this);
+            _queueFactory.Initialise();
             _area = area;
+        }
+
+        public void Initialise()
+        {
+            _queueFactory.Initialise();
         }
 
         public Player CreatePlayer(Position startPosition, Direction initialDirection)
@@ -44,6 +52,11 @@ namespace ChrisJones.Frogger.Factories
         {
             var position = player.Position;
             return new Stain(new Position(position.XPos, position.YPos), new GtkStainRenderer(_area));
+        }
+
+        public GameObjectQueue CreateNextQueue()
+        {
+            return _queueFactory.CreateNextQueue();
         }
     }
 }

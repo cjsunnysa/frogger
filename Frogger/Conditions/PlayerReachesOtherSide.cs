@@ -1,6 +1,7 @@
-﻿using ChrisJones.Frogger.Interfaces;
+﻿using ChrisJones.Frogger.GameObjects;
+using ChrisJones.Frogger.Interfaces;
 
-namespace ChrisJones.Frogger.GameObjects
+namespace ChrisJones.Frogger.Conditions
 {
     class PlayerReachesOtherSide : IWinCondition
     {

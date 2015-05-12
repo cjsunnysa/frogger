@@ -1,4 +1,5 @@
-﻿using ChrisJones.Frogger.Configuration;
+﻿using ChrisJones.Frogger.Conditions;
+using ChrisJones.Frogger.Configuration;
 using ChrisJones.Frogger.Drawing2D;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;

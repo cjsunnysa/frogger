@@ -4,7 +4,7 @@ using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
 
-namespace ChrisJones.Frogger.Engine
+namespace ChrisJones.Frogger.Conditions
 {
     public class IfPlayerLosesStain : IGameCheckProcedure
     {

@@ -3,6 +3,7 @@ using ChrisJones.Frogger.Engine;
 using ChrisJones.Frogger.Factories;
 using Gtk;
 using System;
+using ChrisJones.Frogger.Conditions;
 using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger

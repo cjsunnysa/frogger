@@ -8,7 +8,7 @@ namespace ChrisJones.Frogger.GameObjects
 {
     /// <summary>
     ///     The base class of all interactive game objects.
-    ///     Handles movement, rendering and collisions of game objects.
+    ///     Handles movement, rendering, win condition checks, position, direction and collisions of game objects.
     ///     Can have children GameObject objects.
     /// </summary>
     public abstract class GameObject

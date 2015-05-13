@@ -4,6 +4,7 @@ using ChrisJones.Frogger.Factories;
 using Gtk;
 using System;
 using ChrisJones.Frogger.Conditions;
+using ChrisJones.Frogger.GameCycle;
 using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger
@@ -12,14 +13,14 @@ namespace ChrisJones.Frogger
     ///     A wrapper for the GameEngine class that is specific to and dependent on the Gtk# framework.
     ///     Automates the controlling of the GameEngine class.
     /// </summary>
-    public class GtkGameEngineController
+    public class GtkGameController
     {
         private readonly GameEngine _engine;
         private readonly DrawingArea _area;
         private bool _keepLooping = true;
 
         /// <param name="window">A Gtk.Window which will hold a DrawingArea onto which the game will be drawn.</param>
-        public GtkGameEngineController(Gtk.Window window)
+        public GtkGameController(Gtk.Window window)
         {
             if (window == null)
                 throw new ArgumentNullException ("window");
@@ -28,7 +29,7 @@ namespace ChrisJones.Frogger
 
             var createProcedure = new CreateTwoWayTrafficObjects();
             var factory = new GtkGameObjectFactory(_area, CreateKeyMapper(window));
-            var gameProcedures = new IGameCycleProcedure[] { new IfPlayerWinsRespawn(), new IfPlayerLosesStain() };
+            var gameProcedures = new IGameCycleProcedure[] { new MoveAutomatedObjects(), new IfPlayerWinsThenRespawn(), new IfPlayerLosesThenStain() };
             
             _engine = new GameEngine(createProcedure, factory, gameProcedures);
 
@@ -57,9 +58,9 @@ namespace ChrisJones.Frogger
             return area;
         }
 
-        private GdkKeyMovementMapper CreateKeyMapper(Gtk.Window window)
+        private GdkKeyMapper CreateKeyMapper(Gtk.Window window)
         {
-            var keyMapper = new GdkKeyMovementMapper(Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
+            var keyMapper = new GdkKeyMapper(Gdk.Key.KP_8, Gdk.Key.KP_2, Gdk.Key.KP_4, Gdk.Key.KP_6);
 
             window.KeyPressEvent += keyMapper.OnKeyPressed;
 

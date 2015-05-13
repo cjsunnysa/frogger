@@ -20,16 +20,16 @@ namespace ChrisJones.Frogger.Engine
         
         private List<GameObject> _gameObjects;
         private readonly Stopwatch _frameTimer;
-        private readonly IGameObjectCreationProcedure _creationProcedure;
+        private readonly ICreateObjectMethod _method;
         private readonly IGameObjectFactory _gameObjectFactory;
         private readonly IGameCycleProcedure[] _gameProcedures;
 
-        /// <param name="creationProcedure">Returns a list of all game objects for the game.</param>
+        /// <param name="method">Returns a list of all game objects for the game.</param>
         /// <param name="gameObjectFactory">Creates game objects.</param>
         /// <param name="gameProcedures">Performs win/loss condition checks and responses.</param>
-        public GameEngine(IGameObjectCreationProcedure creationProcedure, IGameObjectFactory gameObjectFactory, IGameCycleProcedure[] gameProcedures)
+        public GameEngine(ICreateObjectMethod method, IGameObjectFactory gameObjectFactory, IGameCycleProcedure[] gameProcedures)
         {
-            _creationProcedure = creationProcedure;
+            _method = method;
             _gameObjectFactory = gameObjectFactory;
             _frameTimer = new Stopwatch();
             
@@ -42,7 +42,7 @@ namespace ChrisJones.Frogger.Engine
         public void InitialiseGame()
         {
             _gameObjectFactory.Initialise();
-            _gameObjects = _creationProcedure.CreateGameObjects(_gameObjectFactory);
+            _gameObjects = _method.CreateGameObjects(_gameObjectFactory);
             
             GameIsRunning = true;
 
@@ -53,9 +53,6 @@ namespace ChrisJones.Frogger.Engine
         {
             if (_frameTimer.ElapsedMilliseconds <= 1000/GameConfig.FPS)
                 return false;
-
-            foreach (var screenObject in _gameObjects)
-                screenObject.AutoMove();
 
             GameIsRunning = PerformGameProcedures();
             
@@ -71,7 +68,6 @@ namespace ChrisJones.Frogger.Engine
         }
 
         #region private methods
-
         private bool PerformGameProcedures()
         {
             var continueRunning = true;

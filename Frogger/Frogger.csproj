@@ -66,22 +66,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameCycle\IfPlayerLosesStain.cs" />
     <Compile Include="Delegates\ChildObjectCreateMethod.cs" />
     <Compile Include="Delegates\OnMoveEvent.cs" />
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
-    <Compile Include="Conditions\IfPlayerLosesStain.cs" />
-    <Compile Include="Conditions\IfPlayerWinsRespawn.cs" />
+    <Compile Include="GameCycle\IfPlayerWinsRespawn.cs" />
     <Compile Include="Factories\GameObjectQueueFactory.cs" />
     <Compile Include="Configuration\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
     <Compile Include="Factories\CreateTwoWayTrafficObjects.cs" />
+    <Compile Include="GameCycle\MoveAutomatedObjects.cs" />
     <Compile Include="GameObjects\GameObjectQueueLeft.cs" />
     <Compile Include="GameObjects\GameObjectQueueRight.cs" />
     <Compile Include="Conditions\PlayerReachesOtherSide.cs" />
     <Compile Include="GameObjects\Stain.cs" />
     <Compile Include="Interfaces\IGameCycleProcedure.cs" />
-    <Compile Include="Interfaces\IGameObjectCreationProcedure.cs" />
+    <Compile Include="Interfaces\ICreateObjectMethod.cs" />
     <Compile Include="Interfaces\IWinCondition.cs" />
     <Compile Include="Renderers\NullRenderer.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkCarRendererLeft.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="GameObjects\GameObjectQueue.cs" />
     <Compile Include="Factories\GtkGameObjectFactory.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GtkGameEngineController.cs" />
+    <Compile Include="GtkGameController.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkCarRenderer.cs" />
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="Renderers\GtkRenderers\GtkPlayerRenderer.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="gtk-gui\Frogger.MainWindow.cs" />
     <Compile Include="Drawing2D\HitTestArea.cs" />
-    <Compile Include="Input\GdkKeyMovementMapper.cs" />
+    <Compile Include="Input\GdkKeyMapper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

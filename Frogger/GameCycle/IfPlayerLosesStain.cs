@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using ChrisJones.Frogger.Factories;
 using ChrisJones.Frogger.GameObjects;
 using ChrisJones.Frogger.Interfaces;
 
-namespace ChrisJones.Frogger.Conditions
+namespace ChrisJones.Frogger.GameCycle
 {
-    public class IfPlayerLosesStain : IGameCycleProcedure
+    public class IfPlayerLosesThenStain : IGameCycleProcedure
     {
         public bool Execute(List<GameObject> gameObjects, IGameObjectFactory factory)
         {

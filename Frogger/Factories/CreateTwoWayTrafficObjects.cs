@@ -6,7 +6,7 @@ using ChrisJones.Frogger.Interfaces;
 
 namespace ChrisJones.Frogger.Factories
 {
-    public class CreateTwoWayTrafficObjects : IGameObjectCreationProcedure
+    public class CreateTwoWayTrafficObjects : ICreateObjectMethod
     {
         private IGameObjectFactory _factory;
         private List<GameObject> _gameObjects;

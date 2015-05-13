@@ -4,13 +4,13 @@ namespace ChrisJones.Frogger
 {
     public partial class MainWindow: Gtk.Window
     {
-        private readonly GtkGameEngineController _gameController;
+        private readonly GtkGameController _gameController;
 
         public MainWindow () : base (Gtk.WindowType.Toplevel)
         {
             Build ();
 
-            _gameController = new GtkGameEngineController(this);
+            _gameController = new GtkGameController(this);
             _gameController.RunGame();
             
             ShowAll ();

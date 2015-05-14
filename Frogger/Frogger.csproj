@@ -66,12 +66,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameCycle\IfPlayerLosesStain.cs" />
+    <Compile Include="GameCycle\IfPlayerLosesThenStain.cs" />
     <Compile Include="Delegates\ChildObjectCreateMethod.cs" />
     <Compile Include="Delegates\OnMoveEvent.cs" />
     <Compile Include="Drawing2D\Dimension.cs" />
     <Compile Include="Drawing2D\Direction.cs" />
-    <Compile Include="GameCycle\IfPlayerWinsRespawn.cs" />
+    <Compile Include="GameCycle\IfPlayerWinsThenRespawn.cs" />
     <Compile Include="Factories\GameObjectQueueFactory.cs" />
     <Compile Include="Configuration\GameConfig.cs" />
     <Compile Include="Engine\GameEngine.cs" />
